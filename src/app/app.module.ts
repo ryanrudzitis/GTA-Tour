@@ -7,13 +7,17 @@ import { ScoresComponent } from './scores/scores.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { JoinTourComponent } from './join-tour/join-tour.component';
+import { MatchesComponent } from './matches/matches.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ScoresComponent,
     HomeComponent,
-    NavbarComponent
+    NavbarComponent,
+    JoinTourComponent,
+    MatchesComponent
   ],
   imports: [
     BrowserModule,
