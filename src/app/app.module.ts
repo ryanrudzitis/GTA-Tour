@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ScoresComponent } from './scores/scores.component';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { JoinTourComponent } from './join-tour/join-tour.component';
@@ -24,7 +25,8 @@ import { MatchesComponent } from './matches/matches.component';
     AppRoutingModule,
     RouterOutlet,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
