@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, User } from 'firebase/auth';
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  User,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -9,7 +14,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   currentUser: User | null = null;
 
-  constructor( private router: Router) {
+  constructor(private router: Router) {
     const auth = getAuth();
     auth.onAuthStateChanged((user) => {
       console.log('User state changed', user);
@@ -47,6 +52,35 @@ export class AuthService {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+      });
+  }
+
+  async signIn(email: string, password: string): Promise<void> {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        this.currentUser = userCredential.user;
+        console.log('User signed in:', this.currentUser);
+        this.router.navigate(['/profile']);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
+  }
+
+  async signOut(): Promise<void> {
+    const auth = getAuth();
+    auth
+      .signOut()
+      .then(() => {
+        console.log('User signed out');
+        this.router.navigate(['/']);
+      })
+      .catch((error) => {
+        console.log('Error signing out:', error);
       });
   }
 }

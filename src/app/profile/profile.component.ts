@@ -9,6 +9,10 @@ import { doc, getDoc, getFirestore } from '@firebase/firestore';
 })
 export class ProfileComponent {
 
+  firstName: string | null = null;
+  lastName: string | null = null;
+  email: string | null = null;
+
   constructor(private authService: AuthService) { }
 
   async ngOnInit(): Promise<void> {
@@ -25,6 +29,9 @@ export class ProfileComponent {
 
     if (docSnap.exists()) {
       console.log('Document data:', docSnap.data());
+      const data = docSnap.data();
+      this.firstName = data?.['firstName'];
+      this.lastName = data?.['lastName'];
     } else {
       console.log('No such document!');
     }

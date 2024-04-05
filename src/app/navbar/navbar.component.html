@@ -5,7 +5,7 @@
   </div>
   <div class="flex-none hidden md:flex">
     <ul class="menu menu-horizontal px-1 text-lg flex gap-3">
-      <li>
+      <li *ngIf="!authService.currentUser">
         <button
           class="btn btn-primary btn-outline"
           routerLink="/sign-up"
@@ -32,6 +32,21 @@
           View Matches
         </button>
       </li>
+    </ul>
+  </div>
+  <div *ngIf="authService.currentUser" class="dropdown dropdown-end">
+    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+      <div class="w-10 rounded-full">
+        <img alt="Tailwind CSS Navbar component" src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+      </div>
+    </div>
+    <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+      <li>
+        <a class="justify-between">
+          Profile
+        </a>
+      </li>
+      <li><a (click)="logout()">Logout</a></li>
     </ul>
   </div>
   <div class="md:hidden">

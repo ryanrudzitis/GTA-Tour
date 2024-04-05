@@ -1,1 +1,51 @@
-<p>sign-in works!</p>
+<div class="bg-green-500 h-screen">
+  <div class="container mx-auto p-6">
+    <h1 class="text-5xl font-bold">Join the GTA Tour!</h1>
+    <p class="py-6 text-xl">
+      Sign In
+    </p>
+    <form
+      [formGroup]="SignInForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4 max-w-xs w-full"
+    >
+      <label>
+        Email:
+        <input
+          type="email"
+          formControlName="email"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="email?.invalid && email?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="SignInForm.controls.email.errors?.['required']"
+            >Email is required.</small
+          >
+          <small
+            class="text-red-700"
+            *ngIf="SignInForm.controls.email.errors?.['email']"
+            >Email is invalid.</small
+          >
+        </div>
+      </label>
+      <label>
+        Password:
+        <input
+          type="password"
+          formControlName="password"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="password?.invalid && password?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="SignInForm.controls.password.errors?.['required']"
+            >Password is required.</small
+          >
+        </div>
+      </label>
+      <button type="submit" class="btn btn-primary">Join the Tour</button>
+    </form>
+    <p>Don't have an account? <a routerLink="/sign-up" routerLinkActive="active"><span class="text-blue-500">Sign Up</span></a></p>
+  </div>
+</div>
