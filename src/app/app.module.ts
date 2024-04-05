@@ -12,6 +12,11 @@ import { JoinTourComponent } from './join-tour/join-tour.component';
 import { MatchesComponent } from './matches/matches.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../firebase';
+import { ProfileComponent } from './profile/profile.component';
+
+const app = initializeApp(firebaseConfig);
 
 @NgModule({
   declarations: [
@@ -22,7 +27,8 @@ import { SignInComponent } from './sign-in/sign-in.component';
     JoinTourComponent,
     MatchesComponent,
     SignUpComponent,
-    SignInComponent
+    SignInComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
