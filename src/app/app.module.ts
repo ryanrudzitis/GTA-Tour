@@ -11,6 +11,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { JoinTourComponent } from './join-tour/join-tour.component';
 import { MatchesComponent } from './matches/matches.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     NavbarComponent,
     JoinTourComponent,
     MatchesComponent,
-    SignUpComponent
+    SignUpComponent,
+    SignInComponent
   ],
   imports: [
     BrowserModule,
