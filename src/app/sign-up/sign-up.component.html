@@ -1,0 +1,94 @@
+<div class="bg-green-500 h-screen">
+  <div class="container mx-auto p-6">
+    <h1 class="text-5xl font-bold">Join the GTA Tour!</h1>
+    <p class="py-6 text-xl">
+      To join the tour, simply fill out the form below!
+      <br />
+      Make sure to play some matches and earn points to climb the rankings!
+    </p>
+    <form
+      [formGroup]="joinTourForm"
+      (ngSubmit)="onSubmit()"
+      class="flex flex-col gap-4 max-w-xs w-full"
+    >
+      <label>
+        First Name:
+        <input
+          type="text"
+          formControlName="first_name"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="first_name?.invalid && first_name?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="joinTourForm.controls.first_name.errors?.['required']"
+            >First name is required.</small
+          >
+        </div>
+      </label>
+      <label>
+        Last Name:
+        <input
+          type="text"
+          formControlName="last_name"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="last_name?.invalid && last_name?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="joinTourForm.controls.last_name.errors?.['required']"
+            >Last name is required.</small
+          >
+        </div>
+      </label>
+      <!-- <label>Country:</label>
+      <select
+        id="country"
+        name="country"
+        type="text"
+        formControlName="country"
+        class="input input-bordered w-full max-w-xs"
+      >
+        <option *ngFor="let country of countryNames" [value]="country">
+          {{ country }}
+        </option>
+      </select> -->
+      <label>
+        Email:
+        <input
+          type="email"
+          formControlName="email"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="email?.invalid && email?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="joinTourForm.controls.email.errors?.['required']"
+            >Email is required.</small
+          >
+          <small
+            class="text-red-700"
+            *ngIf="joinTourForm.controls.email.errors?.['email']"
+            >Email is invalid.</small
+          >
+        </div>
+      </label>
+      <label>
+        Password:
+        <input
+          type="password"
+          formControlName="password"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div *ngIf="password?.invalid && password?.touched">
+          <small
+            class="text-red-700"
+            *ngIf="joinTourForm.controls.password.errors?.['required']"
+            >Password is required.</small
+          >
+        </div>
+      </label>
+      <button type="submit" class="btn btn-primary">Join the Tour</button>
+    </form>
+  </div>
+</div>
