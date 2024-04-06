@@ -13,8 +13,7 @@ import { MatchesComponent } from './matches/matches.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { initializeApp } from 'firebase/app';
-// import { firebaseConfig } from '../../firebase';
-import { firebaseConfig } from '../environments/environment';
+import { firebaseConfig } from '../../firebase';
 import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 
@@ -39,7 +38,7 @@ const app = initializeApp(firebaseConfig);
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
