@@ -40,6 +40,7 @@ export class SignUpComponent {
     .sort();
 
   showSpinner = false;
+  
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {}

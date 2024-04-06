@@ -31,13 +31,21 @@ export class SignInComponent {
   }
 
   onSubmit(): void {
-    console.log('Form submitted');
+    this.invalidCredError = false;
+
     if (!this.SignInForm.valid) {
+      let field = null;
+
+      if (this.email?.errors?.['required']) {
+        field = document.querySelector('#emailInput') as HTMLElement;
+      } else if (this.password?.errors?.['required']) {
+        field = document.querySelector('#passwordInput') as HTMLElement;
+      }
+      if (field) field.focus();
       return;
     }
 
     this.showSpinner = true;
-    this.invalidCredError = false;
     this.signIn();
   }
 
@@ -49,6 +57,16 @@ export class SignInComponent {
     .catch((error) => {
       console.error('Error signing in:', error);
       if (error.code === 'auth/invalid-credential') {
+        //clear password field
+        this.SignInForm.patchValue({
+          password: ''
+        });
+        // focus on password field
+        const passwordField = document.querySelector('#passwordInput') as HTMLElement;
+        passwordField.focus();
+        // effectively clears form errors
+        this.SignInForm.markAsUntouched();
+
         this.invalidCredError = true;
       } else {
         console.error('Error signing in:', error);
