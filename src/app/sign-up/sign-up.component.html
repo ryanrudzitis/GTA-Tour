@@ -1,6 +1,6 @@
-<div class="bg-green-500 h-screen">
+<div class="h-screen">
   <div class="container mx-auto p-6">
-    <h1 class="text-5xl font-bold">Join the GTA Tour!</h1>
+    <h1 class="text-4xl font-bold">Join the GTA Tour!</h1>
     <p class="py-6 text-xl">
       To join the tour, simply fill out the form below!
       <br />
@@ -88,8 +88,8 @@
           >
         </div>
       </label>
-      <button type="submit" class="btn btn-primary">Join the Tour</button>
+      <button type="submit" class="btn btn-primary">Join the Tour <span class="loading loading-spinner loading-sm" *ngIf="showSpinner"></span></button>
     </form>
-    <p>Already have an account? <a routerLink="/sign-in" routerLinkActive="active"><span class="text-blue-500">Sign in</span></a></p>
+    <p class="mt-3">Already have an account? <a routerLink="/sign-in" routerLinkActive="active"><span class="text-blue-500">Sign in</span></a></p>
   </div>
 </div>

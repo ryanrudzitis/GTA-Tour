@@ -39,6 +39,7 @@ export class SignUpComponent {
     .map(([name]) => name + ' ' + flag(name))
     .sort();
 
+  showSpinner = false;
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {}
@@ -48,14 +49,16 @@ export class SignUpComponent {
     const password = this.password?.value as string;
 
     await this.authService.signUp(email, password, this.first_name?.value as string, this.last_name?.value as string);
+    //TODO handle error
+    this.showSpinner = false;
   }
 
   onSubmit(): void {
-    // make sure validation is passed
     if (!this.joinTourForm.valid) {
       return;
     }
-    console.log(this.joinTourForm.value);
+    
+    this.showSpinner = true;
     this.signUpWithEmailPassword();
   }
 }

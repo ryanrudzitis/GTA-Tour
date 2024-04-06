@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   User,
   signInWithEmailAndPassword,
+  UserCredential,
 } from 'firebase/auth';
 import { Router } from '@angular/router';
 
@@ -55,20 +56,17 @@ export class AuthService {
       });
   }
 
-  async signIn(email: string, password: string): Promise<void> {
+  async signIn(email: string, password: string): Promise<UserCredential> {
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    return signInWithEmailAndPassword(auth, email, password).then(
+      (userCredential) => {
         // Signed in
         this.currentUser = userCredential.user;
         console.log('User signed in:', this.currentUser);
         this.router.navigate(['/profile']);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
-      });
+        return userCredential;
+      }
+    );
   }
 
   async signOut(): Promise<void> {

@@ -15,5 +15,13 @@ export class NavbarComponent {
     this.authService.signOut();
   }
 
+  closeSidebar(): void {
+    const drawer = document.querySelector('#my-drawer-3') as HTMLInputElement;
+    console.log(drawer);
+    if (drawer) {
+      drawer.checked = false;
+    }
+  }
+
 
 }

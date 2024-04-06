@@ -9,6 +9,8 @@ import { AuthService } from '../auth.service';
 })
 export class SignInComponent {
 
+  invalidCredError = false;
+  showSpinner = false;
   SignInForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
@@ -34,12 +36,27 @@ export class SignInComponent {
       return;
     }
 
+    this.showSpinner = true;
+    this.invalidCredError = false;
     this.signIn();
   }
 
   signIn(): void {
-    console.log('Sign in');
-    this.authService.signIn(this.email?.value as string, this.password?.value as string);
+    this.authService.signIn(this.email?.value as string, this.password?.value as string)
+    .then(() => {
+      console.log('Signed in');
+    })
+    .catch((error) => {
+      console.error('Error signing in:', error);
+      if (error.code === 'auth/invalid-credential') {
+        this.invalidCredError = true;
+      } else {
+        console.error('Error signing in:', error);
+      }
+    })
+    .finally(() => {
+      this.showSpinner = false;
+    });
 
   }
 

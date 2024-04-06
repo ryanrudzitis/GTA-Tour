@@ -15,6 +15,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../../firebase';
 import { ProfileComponent } from './profile/profile.component';
+import { RankingsComponent } from './rankings/rankings.component';
 
 const app = initializeApp(firebaseConfig);
 
@@ -28,7 +29,8 @@ const app = initializeApp(firebaseConfig);
     MatchesComponent,
     SignUpComponent,
     SignInComponent,
-    ProfileComponent
+    ProfileComponent,
+    RankingsComponent
   ],
   imports: [
     BrowserModule,

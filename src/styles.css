@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;  
 
+body {
+  @apply bg-default;
+}
+
+html, body {
+  font-family: 'Body Sans', sans-serif;
+}
