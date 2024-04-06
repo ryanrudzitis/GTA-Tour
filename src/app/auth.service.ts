@@ -40,9 +40,9 @@ export class AuthService {
           firstName,
           lastName,
           email,
+          role: 'normal',
         })
           .then(() => {
-            console.log('Document successfully written!');
             this.router.navigate(['/profile']);
           })
           .catch((error) => {
