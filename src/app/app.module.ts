@@ -8,7 +8,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './home/home.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { JoinTourComponent } from './join-tour/join-tour.component';
 import { MatchesComponent } from './matches/matches.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SignInComponent } from './sign-in/sign-in.component';
@@ -25,7 +24,6 @@ const app = initializeApp(firebaseConfig);
     ScoresComponent,
     HomeComponent,
     NavbarComponent,
-    JoinTourComponent,
     MatchesComponent,
     SignUpComponent,
     SignInComponent,

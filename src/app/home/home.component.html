@@ -15,11 +15,17 @@
         themselves in the vibrant tennis community of the GTA.
       </p>
       <div class="flex flex-col gap-2 lg:flex-row">
-        <a routerLink="/sign-up" routerLinkActive="active">
+        <a routerLink="/sign-up" routerLinkActive="active" *ngIf="!auth.currentUser">
           <button class="btn btn-primary w-[133px]">Join the Tour</button>
         </a>
-        <a routerLink="/sign-in" routerLinkActive="active">
+        <a routerLink="/sign-in" routerLinkActive="active" *ngIf="!auth.currentUser">
           <button class="btn btn-primary w-[133px]">Sign In</button>
+        </a>
+        <a routerLink="/matches" routerLinkActive="active" *ngIf="auth.currentUser">
+          <button class="btn btn-primary w-[133px]">View Matches</button>
+        </a>
+        <a routerLink="/scores" routerLinkActive="active" *ngIf="auth.currentUser">
+          <button class="btn btn-primary w-[133px]">View Scores</button>
         </a>
       </div>
     </div>

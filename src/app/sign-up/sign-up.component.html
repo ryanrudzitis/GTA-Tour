@@ -7,13 +7,14 @@
       Make sure to play some matches and earn points to climb the rankings!
     </p>
     <form
-      [formGroup]="joinTourForm"
+      [formGroup]="signInForm"
       (ngSubmit)="onSubmit()"
       class="flex flex-col gap-4 max-w-xs w-full"
     >
       <label>
-        First Name:
+        First name:
         <input
+          id="firstNameInput"
           type="text"
           formControlName="first_name"
           class="input input-bordered w-full max-w-xs"
@@ -21,14 +22,15 @@
         <div *ngIf="first_name?.invalid && first_name?.touched">
           <small
             class="text-red-700"
-            *ngIf="joinTourForm.controls.first_name.errors?.['required']"
+            *ngIf="signInForm.controls.first_name.errors?.['required']"
             >First name is required.</small
           >
         </div>
       </label>
       <label>
-        Last Name:
+        Last name:
         <input
+          id="lastNameInput"
           type="text"
           formControlName="last_name"
           class="input input-bordered w-full max-w-xs"
@@ -36,7 +38,7 @@
         <div *ngIf="last_name?.invalid && last_name?.touched">
           <small
             class="text-red-700"
-            *ngIf="joinTourForm.controls.last_name.errors?.['required']"
+            *ngIf="signInForm.controls.last_name.errors?.['required']"
             >Last name is required.</small
           >
         </div>
@@ -56,6 +58,7 @@
       <label>
         Email:
         <input
+          id="emailInput"
           type="email"
           formControlName="email"
           class="input input-bordered w-full max-w-xs"
@@ -63,12 +66,12 @@
         <div *ngIf="email?.invalid && email?.touched">
           <small
             class="text-red-700"
-            *ngIf="joinTourForm.controls.email.errors?.['required']"
+            *ngIf="signInForm.controls.email.errors?.['required']"
             >Email is required.</small
           >
           <small
             class="text-red-700"
-            *ngIf="joinTourForm.controls.email.errors?.['email']"
+            *ngIf="signInForm.controls.email.errors?.['email']"
             >Email is invalid.</small
           >
         </div>
@@ -76,6 +79,7 @@
       <label>
         Password:
         <input
+          id="passwordInput"
           type="password"
           formControlName="password"
           class="input input-bordered w-full max-w-xs"
@@ -83,8 +87,13 @@
         <div *ngIf="password?.invalid && password?.touched">
           <small
             class="text-red-700"
-            *ngIf="joinTourForm.controls.password.errors?.['required']"
+            *ngIf="signInForm.controls.password.errors?.['required']"
             >Password is required.</small
+          >
+          <small
+            class="text-red-700"
+            *ngIf="signInForm.controls.password.errors?.['minlength']"
+            >Password must be at least 6 characters.</small
           >
         </div>
       </label>

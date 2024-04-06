@@ -11,7 +11,7 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent {
-  joinTourForm = new FormGroup({
+  signInForm = new FormGroup({
     first_name: new FormControl('', [Validators.required]),
     last_name: new FormControl('', [Validators.required]),
     country: new FormControl(''),
@@ -23,16 +23,16 @@ export class SignUpComponent {
   });
 
   get first_name() {
-    return this.joinTourForm.get('first_name')
+    return this.signInForm.get('first_name')
   }
   get last_name() {
-    return this.joinTourForm.get('last_name');
+    return this.signInForm.get('last_name');
   }
   get email() {
-    return this.joinTourForm.get('email');
+    return this.signInForm.get('email');
   }
   get password() {
-    return this.joinTourForm.get('password');
+    return this.signInForm.get('password');
   }
 
   countryNames = Object.values(countries)
@@ -55,7 +55,22 @@ export class SignUpComponent {
   }
 
   onSubmit(): void {
-    if (!this.joinTourForm.valid) {
+    if (!this.signInForm.valid) {
+      let field = null;
+      if (this.first_name?.errors?.['required']) {
+        field = document.querySelector('#firstNameInput') as HTMLElement;
+      } else if (this.last_name?.errors?.['required']) {
+        field = document.querySelector('#lastNameInput') as HTMLElement;
+      } else if (this.email?.errors?.['required']) {
+        field = document.querySelector('#emailInput') as HTMLElement;
+      } else if (this.password?.errors?.['required'] || this.password?.errors?.['minlength']) {
+        field = document.querySelector('#passwordInput') as HTMLElement;
+        console.log('password error');
+        this.signInForm.patchValue({
+          password: ''
+        });
+      }
+      if (field) field.focus();
       return;
     }
     
