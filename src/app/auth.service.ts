@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import {
   getAuth,
@@ -14,13 +15,13 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   currentUser: User | null = null;
+  // currentUser$: Observable<User | null>;
 
   constructor(private router: Router) {
     const auth = getAuth();
-    auth.onAuthStateChanged((user) => {
-      console.log('User state changed', user);
-      this.currentUser = user;
-    });
+      auth.onAuthStateChanged((user) => {
+        this.currentUser = user;
+      });
   }
 
   async signUp(
