@@ -14,7 +14,6 @@ export class ProfileComponent {
   firstName: string | null = null;
   lastName: string | null = null;
   email: string | null = null;
-  private subscription: Subscription | undefined;
 
   constructor(
     private authService: AuthService,
@@ -38,19 +37,13 @@ export class ProfileComponent {
   }
 
   async getUserData(): Promise<void> {
-    const user = this.authService.currentUser;
-    const uid = user?.uid;
-    const db = getFirestore();
-    const userDoc = doc(db, 'users' as string, uid as string);
-    const docSnap = await getDoc(userDoc);
-
-    if (docSnap.exists()) {
-      console.log('Document data:', docSnap.data());
-      const data = docSnap.data();
-      this.firstName = data?.['firstName'];
-      this.lastName = data?.['lastName'];
-    } else {
-      console.log('No user data found!');
+    const userInfo = await this.firebaseService.getUserInfo(
+      this.authService.currentUser?.uid as string
+    );
+    if (userInfo) {
+      this.firstName = userInfo['firstName'];
+      this.lastName = userInfo['lastName'];
+      this.email = userInfo['email'];
     }
   }
 }

@@ -8,6 +8,34 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 export class FirebaseService {
   constructor() {}
 
+  async getUserName(userId: string): Promise<string> {
+    const db = getFirestore();
+    const userDoc = doc(db, 'users', userId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (!userData) {
+      return '';
+    } else {
+      return `${userData['firstName']} ${userData['lastName']}`;
+    }
+  }
+
+  /**
+   * Get user information from the database
+   * @param {string} userId - The id of the user
+   * @returns {Promise<any>} - The user information which includes first name, last name, and email
+   */
+  async getUserInfo(userId: string): Promise<any> {
+    const db = getFirestore();
+    const userDoc = doc(db, 'users', userId);
+    const userSnap = await getDoc(userDoc);
+    if (userSnap.exists()) {
+      return userSnap.data();
+    } else {
+      return null;
+    }
+  }
+
   /**
    * Get all matches in a tournament
    * @param {string} tournamentId - The id of the tournament
@@ -26,6 +54,16 @@ export class FirebaseService {
     return matches;
   }
 
+  async getAllTournaments(): Promise<any> {
+    const db = getFirestore();
+    const tournamentsCollection = collection(db, 'tournaments');
+    const tournamentsSnapshot = await getDocs(tournamentsCollection);
+    const tournaments = tournamentsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return tournaments;
+  }
+
+
+  //TODO: function may be redundant
   /**
    * Get all tournament ids from the database
    * @returns {Promise<string[]>} - Array of tournament ids
@@ -41,6 +79,18 @@ export class FirebaseService {
     });
 
     return tournamentIds;
+  }
+
+  async getTournamentName(tournamentId: string): Promise<string> {
+    const db = getFirestore();
+    const tournamentDoc = doc(db, 'tournaments', tournamentId);
+    const tournamentSnap = await getDoc(tournamentDoc);
+    const tournamentData = tournamentSnap.data();
+    if (tournamentData) {
+      return tournamentData['name'];
+    } else {
+      return '';
+    }
   }
 
   /**
@@ -76,10 +126,24 @@ export class FirebaseService {
 
         if (this.isPlayerInMatch(playerId, match)) {
           console.log('match!!!!!!:', match);
+          match.tournamentId = tournamentId;
           playerMatches.push(match);
         }
       }
     }
     return playerMatches;
   }
+
+  /**
+   * Get all players from the database
+   * @returns {Promise<any>} - Array of all players
+   */
+  async getAllPlayers(): Promise<any> {
+    const db = getFirestore();
+    const playersCollection = collection(db, 'users');
+    const playersSnapshot = await getDocs(playersCollection);
+    const players = playersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data()}));
+    return players;
+  }
 }
+

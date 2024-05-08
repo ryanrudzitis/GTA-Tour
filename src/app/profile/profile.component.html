@@ -4,6 +4,7 @@
   <br>
   <p class="text-xl">My Matches<p>
     <div>
-      
+      <div *ngFor="let match of matches">
+        <app-match [match]="match"></app-match>
     </div>
 </div>

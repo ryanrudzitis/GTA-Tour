@@ -1,1 +1,32 @@
-<p>match works!</p>
+<div
+  class="max-w-96 border border-slate-300 rounded-md w-fit overflow-hidden bg-slate-100"
+>
+  <div class="p-1">
+    <span class=""
+      >{{ capitalizeFirstLetter(status) }} - {{ round?.toUpperCase() }} -
+      {{ tournamentName }}</span
+    >
+    <table class="table-fixed">
+      <!-- head -->
+      <thead>
+        <tr></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-lg pr-5">
+            <span>{{ getAbbreviatedName(player1Name) }}</span>
+          </td>
+          <td class="text-lg">{{ player1Score[0] }}</td>
+          <td class="px-2 text-lg">{{ player1Score[1] }}</td>
+        </tr>
+        <tr>
+          <td class="text-lg pr-5 flex items-center">
+            <span>{{ getAbbreviatedName(player2Name) }}</span> <mat-icon class="scale-75 text-green-400">done</mat-icon>
+          </td>
+          <td class="text-lg">{{ player2Score[0] }}</td>
+          <td class="px-2 text-lg">{{ player2Score[1] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

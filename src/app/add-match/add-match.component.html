@@ -1,0 +1,60 @@
+<div class="h-full">
+  <div class="flex flex-col max-w-screen-sm p-4">
+    <h2 class="text-4xl font-bold mb-4">Add Match</h2>
+    <mat-form-field class="max-w-80">
+      <mat-label>Tournament</mat-label>
+      <mat-select [(value)]="selectedTournament">
+        <mat-option
+          *ngFor="let tournament of tournamentDropdownOptions"
+          [value]="tournament.id"
+          >{{ tournament.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <!-- <mat-form-field> -->
+      <mat-button-toggle-group [(value)]="selectedRound" class="w-fit mb-7">
+        <mat-button-toggle *ngFor="let round of roundOptions" [value]="round">{{
+          round
+        }}</mat-button-toggle>
+      </mat-button-toggle-group>
+    <!-- </mat-form-field> -->
+    <mat-form-field class="max-w-80">
+      <mat-label>Winner</mat-label>
+      <mat-select [(value)]="selectedWinner">
+        <mat-option
+          *ngFor="let player of playerDropdownOptions"
+          [value]="player.id"
+          >{{ player.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="max-w-80">
+      <mat-label>Loser</mat-label>
+      <mat-select [(value)]="selectedLoser">
+        <mat-option
+          *ngFor="let player of playerDropdownOptions | filter : selectedWinner"
+          [value]="player.id"
+          >{{ player.name }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="max-w-40">
+      <mat-label>Set 1</mat-label>
+      <input matInput />
+    </mat-form-field>
+    <mat-form-field class="max-w-40">
+      <mat-label>Set 2</mat-label>
+      <input matInput />
+    </mat-form-field>
+    <mat-form-field class="max-w-40">
+      <mat-label>Set 3</mat-label>
+      <input matInput />
+      <!-- <mat-hint>Leave blank if not needed</mat-hint> -->
+    </mat-form-field>
+    <mat-button-toggle-group [(value)]="selectedStatus" class="w-fit mb-7">
+      <mat-button-toggle *ngFor="let status of statusOptions" [value]="status">{{
+        status
+      }}</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+</div>

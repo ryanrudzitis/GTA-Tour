@@ -1,0 +1,3 @@
+.smallDiagramButtonContainer {
+  @include mat.button-density(-2);
+}

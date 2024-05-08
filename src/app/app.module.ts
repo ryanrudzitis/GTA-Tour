@@ -16,6 +16,16 @@ import { firebaseConfig } from '../../firebase';
 import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 import { MatchComponent } from './match/match.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './shared/modules/material/material.module';
+import { AddMatchComponent } from './add-match/add-match.component';
+import {MatSelectModule} from '@angular/material/select';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { FilterPipe } from './filter.pipe';
+
 
 const app = initializeApp(firebaseConfig);
 
@@ -30,7 +40,9 @@ const app = initializeApp(firebaseConfig);
     SignInComponent,
     ProfileComponent,
     RankingsComponent,
-    MatchComponent
+    MatchComponent,
+    AddMatchComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -39,6 +51,13 @@ const app = initializeApp(firebaseConfig);
     RouterLink,
     RouterLinkActive,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    MatSelectModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
