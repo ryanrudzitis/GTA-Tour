@@ -22,16 +22,12 @@ export class AddMatchComponent {
 
   roundOptions: string[] = ['QF', 'SF', 'F'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
-  selectedRound: string = '';
-  selectedStatus: string = '';
   tournamentDropdownOptions: TournamentDropdownOption[] = [];
   playerDropdownOptions: PlayerDropdownOption[] = [];
   selectedWinner: string = '';
-  selectedLoser: string = '';
-  selectedTournament: string = '';
 
   matchForm = new FormGroup({
-    date: new FormControl(''),
+    date: new FormControl(new Date(), [Validators.required]),
     tournament: new FormControl('', [Validators.required]),
     round: new FormControl('', [Validators.required]),
     winner: new FormControl('', [Validators.required]),

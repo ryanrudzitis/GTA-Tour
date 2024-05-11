@@ -26,6 +26,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import { FilterPipe } from './filter.pipe';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 
 const app = initializeApp(firebaseConfig);
@@ -59,7 +60,8 @@ const app = initializeApp(firebaseConfig);
     MatFormFieldModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]
