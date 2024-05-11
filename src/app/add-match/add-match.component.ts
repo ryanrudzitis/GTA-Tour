@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
+import { FormControl, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 
 interface PlayerDropdownOption {
   id: string;
@@ -28,6 +29,18 @@ export class AddMatchComponent {
   selectedWinner: string = '';
   selectedLoser: string = '';
   selectedTournament: string = '';
+
+  matchForm = new FormGroup({
+    date: new FormControl(''),
+    tournament: new FormControl('', [Validators.required]),
+    round: new FormControl('', [Validators.required]),
+    winner: new FormControl('', [Validators.required]),
+    loser: new FormControl('', [Validators.required]),
+    set1: new FormControl('', [Validators.required]),
+    set2: new FormControl('', [Validators.required]),
+    set3: new FormControl(''),
+    status: new FormControl('Final', [Validators.required]),
+  });
 
   constructor(private firebaseService: FirebaseService) {
     
@@ -63,6 +76,15 @@ export class AddMatchComponent {
         name: tournament.name,
       };
     });
+  }
+
+  onSubmit(): void {
+    console.log(this.matchForm.value);
+    console.log("form submitted");
+  }
+
+  get tournament() {
+    return this.matchForm.get('tournament')!;
   }
 
 
