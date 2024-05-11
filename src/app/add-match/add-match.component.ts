@@ -20,8 +20,8 @@ interface TournamentDropdownOption {
 
 export class AddMatchComponent {
 
-  setScoreRegex = /^\d-\d$|\d\(\d+\)-\d\(\d+\)/;
-  setScoreRegexUnrequired = /^$|^\d-\d$|\d\(\d+\)-\d\(\d+\)/;
+  setScoreRegex = /((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
+  setScoreRegexUnrequired = /^$|((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
 
   roundOptions: string[] = ['QF', 'SF', 'F'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
