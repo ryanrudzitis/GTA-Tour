@@ -20,6 +20,9 @@ interface TournamentDropdownOption {
 
 export class AddMatchComponent {
 
+  setScoreRegex = /^\d-\d$|\d\(\d+\)-\d\(\d+\)/;
+  setScoreRegexUnrequired = /^$|^\d-\d$|\d\(\d+\)-\d\(\d+\)/;
+
   roundOptions: string[] = ['QF', 'SF', 'F'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
   tournamentDropdownOptions: TournamentDropdownOption[] = [];
@@ -32,9 +35,9 @@ export class AddMatchComponent {
     round: new FormControl('', [Validators.required]),
     winner: new FormControl('', [Validators.required]),
     loser: new FormControl('', [Validators.required]),
-    set1: new FormControl('', [Validators.required]),
-    set2: new FormControl('', [Validators.required]),
-    set3: new FormControl(''),
+    set1: new FormControl('', [Validators.required, Validators.pattern(this.setScoreRegex)]),
+    set2: new FormControl('', [Validators.required, Validators.pattern(this.setScoreRegex)]),
+    set3: new FormControl('', [Validators.pattern(this.setScoreRegexUnrequired)]),
     status: new FormControl('Final', [Validators.required]),
   });
 
@@ -77,6 +80,14 @@ export class AddMatchComponent {
   onSubmit(): void {
     console.log(this.matchForm.value);
     console.log("form submitted");
+
+    // check if the form is valid
+    if (this.matchForm.valid) {
+      console.log("form is valid");
+    } else {
+      console.log("form is invalid");
+
+    }
   }
 
   get tournament() {
