@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
-import { FormControl, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  ReactiveFormsModule,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 interface PlayerDropdownOption {
   id: string;
@@ -15,13 +20,17 @@ interface TournamentDropdownOption {
 @Component({
   selector: 'app-add-match',
   templateUrl: './add-match.component.html',
-  styleUrls: ['./add-match.component.css']
+  styleUrls: ['./add-match.component.css'],
 })
-
 export class AddMatchComponent {
-
-  setScoreRegex = /((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
-  setScoreRegexUnrequired = /^$|((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
+  finalScoreRegex =
+    /((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
+  finalScoreRegexUnrequired =
+    /^$|((6-[0-4]|[0-4]-6)|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
+  incompleteScoreRegex =
+    /([0-6]-[0-4]|[0-4]-[0-6]|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
+  incompleteScoreRegexUnrequired =
+    /^$|([0-6]-[0-4]|[0-4]-[0-6]|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
 
   roundOptions: string[] = ['QF', 'SF', 'F'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
@@ -35,15 +44,21 @@ export class AddMatchComponent {
     round: new FormControl('', [Validators.required]),
     winner: new FormControl('', [Validators.required]),
     loser: new FormControl('', [Validators.required]),
-    set1: new FormControl('', [Validators.required, Validators.pattern(this.setScoreRegex)]),
-    set2: new FormControl('', [Validators.required, Validators.pattern(this.setScoreRegex)]),
-    set3: new FormControl('', [Validators.pattern(this.setScoreRegexUnrequired)]),
+    set1: new FormControl('', [
+      Validators.required,
+      Validators.pattern(this.finalScoreRegex),
+    ]),
+    set2: new FormControl('', [
+      Validators.required,
+      Validators.pattern(this.finalScoreRegex),
+    ]),
+    set3: new FormControl('', [
+      Validators.pattern(this.finalScoreRegexUnrequired),
+    ]),
     status: new FormControl('Final', [Validators.required]),
   });
 
-  constructor(private firebaseService: FirebaseService) {
-    
-  }
+  constructor(private firebaseService: FirebaseService) {}
 
   async ngOnInit() {
     const allPlayers = await this.firebaseService.getAllPlayers();
@@ -52,6 +67,50 @@ export class AddMatchComponent {
     this.buildTournamentDropdown(allTournaments);
     console.log(this.playerDropdownOptions);
     console.log(this.tournamentDropdownOptions);
+
+    this.matchForm.get('status')?.valueChanges.subscribe((value) => {
+      console.log('status changed to ', value);
+
+      if (value === 'Final') {
+        this.matchForm
+          .get('set1')
+          ?.setValidators([
+            Validators.required,
+            Validators.pattern(this.finalScoreRegex),
+          ]);
+        this.matchForm
+          .get('set2')
+          ?.setValidators([
+            Validators.required,
+            Validators.pattern(this.finalScoreRegex),
+          ]);
+        const value = this.matchForm.get('set2')?.getRawValue();
+        this.matchForm.get('set2')?.reset();
+        this.matchForm.get('set2')?.setValue(value);
+
+        this.matchForm
+          .get('set3')
+          ?.setValidators([Validators.pattern(this.finalScoreRegexUnrequired)]);
+      } else if (value === 'Walkover' || value === 'Retired') {
+        this.matchForm
+          .get('set1')
+          ?.setValidators([
+            Validators.required,
+            Validators.pattern(this.incompleteScoreRegex),
+          ]);
+        this.matchForm
+          .get('set2')
+          ?.setValidators([Validators.pattern(this.incompleteScoreRegex)]);
+        const value = this.matchForm.get('set2')?.getRawValue();
+        this.matchForm.get('set2')?.reset(); // gets rid of the asterisk that appears in the input field
+        this.matchForm.get('set2')?.setValue(value);
+        this.matchForm
+          .get('set3')
+          ?.setValidators([
+            Validators.pattern(this.incompleteScoreRegexUnrequired),
+          ]);
+      }
+    });
   }
 
   /**
@@ -79,20 +138,17 @@ export class AddMatchComponent {
 
   onSubmit(): void {
     console.log(this.matchForm.value);
-    console.log("form submitted");
+    console.log('form submitted');
 
     // check if the form is valid
     if (this.matchForm.valid) {
-      console.log("form is valid");
+      console.log('form is valid');
     } else {
-      console.log("form is invalid");
-
+      console.log('form is invalid');
     }
   }
 
   get tournament() {
     return this.matchForm.get('tournament')!;
   }
-
-
 }

@@ -5,7 +5,12 @@
       <div class="max-w-80 flex flex-col">
         <mat-form-field hideRequiredMarker>
           <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="picker" readonly formControlName="date" />
+          <input
+            matInput
+            [matDatepicker]="picker"
+            readonly
+            formControlName="date"
+          />
           <mat-datepicker-toggle
             matIconSuffix
             [for]="picker"
@@ -52,6 +57,14 @@
             >
           </mat-select>
         </mat-form-field>
+        <mat-form-field hideRequiredMarker>
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option *ngFor="let status of statusOptions" [value]="status">{{
+              status
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
         <mat-form-field>
           <mat-label>Set 1</mat-label>
           <input matInput formControlName="set1" />
@@ -64,21 +77,6 @@
         <mat-form-field class="max-w-40">
           <mat-label>Set 3</mat-label>
           <input matInput formControlName="set3" />
-        </mat-form-field>
-        <!-- <mat-button-toggle-group formControlName="status" class="w-fit mb-7">
-        <mat-button-toggle
-          *ngFor="let status of statusOptions"
-          [value]="status"
-          >{{ status }}</mat-button-toggle
-        >
-      </mat-button-toggle-group> -->
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Status</mat-label>
-          <mat-select formControlName="status">
-            <mat-option *ngFor="let status of statusOptions" [value]="status">{{
-              status
-            }}</mat-option>
-          </mat-select>
         </mat-form-field>
       </div>
 
