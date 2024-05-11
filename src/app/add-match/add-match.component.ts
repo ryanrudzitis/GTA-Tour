@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface PlayerDropdownOption {
   id: string;
@@ -59,7 +60,7 @@ export class AddMatchComponent {
     status: new FormControl('Final', [Validators.required]),
   });
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar) {}
 
   async ngOnInit() {
     const allPlayers = await this.firebaseService.getAllPlayers();
@@ -105,9 +106,20 @@ export class AddMatchComponent {
       return;
     } 
 
+    this._snackBar.open('Adding match...');
     // get the form values
     const formValues = this.matchForm.value;
-    await this.firebaseService.addMatch(formValues);
+    try {
+      await this.firebaseService.addMatch(formValues);
+      this._snackBar.open('Match added', 'Close', {
+        duration: 5000,
+      });
+      
+    } catch (error) {
+      console.error('Error adding match:', error);
+      this._snackBar.open('Error adding match', 'Close');
+    }
+
   }
 
   get tournament() {
@@ -161,5 +173,9 @@ export class AddMatchComponent {
           ]);
       }
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
   }
 }
