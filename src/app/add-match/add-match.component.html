@@ -1,7 +1,8 @@
 <div class="h-full">
   <div class="flex flex-col max-w-screen-sm p-4">
     <h2 class="text-4xl font-bold mb-4">Add Match</h2>
-    <form [formGroup]="matchForm" (ngSubmit)="onSubmit()" class="flex flex-col">
+    <mat-spinner *ngIf="showSpinner"/>
+    <form [formGroup]="matchForm" (ngSubmit)="onSubmit()" class="flex flex-col" *ngIf="!showSpinner">
       <div class="max-w-80 flex flex-col">
         <mat-form-field hideRequiredMarker>
           <mat-label>Date</mat-label>
@@ -79,7 +80,6 @@
           <input matInput formControlName="set3" />
         </mat-form-field>
       </div>
-
       <button
         mat-raised-button
         color="primary"
@@ -89,9 +89,7 @@
       >
         Add Match
       </button>
-      <!-- <button mat-raised-button color="primary" type="submit" class="w-40">
-        Add Match
-      </button> -->
     </form>
+
   </div>
 </div>

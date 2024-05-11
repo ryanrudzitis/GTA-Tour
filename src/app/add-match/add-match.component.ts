@@ -37,6 +37,7 @@ export class AddMatchComponent {
   tournamentDropdownOptions: TournamentDropdownOption[] = [];
   playerDropdownOptions: PlayerDropdownOption[] = [];
   selectedWinner: string = '';
+  showSpinner: boolean = true;
 
   matchForm = new FormGroup({
     date: new FormControl(new Date(), [Validators.required]),
@@ -65,6 +66,7 @@ export class AddMatchComponent {
     const allTournaments = await this.firebaseService.getAllTournaments();
     this.buildPlayerDropdown(allPlayers);
     this.buildTournamentDropdown(allTournaments);
+    this.showSpinner = false;
     console.log(this.playerDropdownOptions);
     console.log(this.tournamentDropdownOptions);
     this.statusListener();
