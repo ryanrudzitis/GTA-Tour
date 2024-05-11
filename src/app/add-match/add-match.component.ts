@@ -32,7 +32,7 @@ export class AddMatchComponent {
   incompleteScoreRegexUnrequired =
     /^$|([0-6]-[0-4]|[0-4]-[0-6]|(7-5|5-7))|([7]\(\d+\)-[6]\(\d+\)|[6]\(\d+\)-[7]\(\d+\))/;
 
-  roundOptions: string[] = ['QF', 'SF', 'F'];
+  roundOptions: string[] = ['Quarterfinals', 'Semifinals', 'Finals'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
   tournamentDropdownOptions: TournamentDropdownOption[] = [];
   playerDropdownOptions: PlayerDropdownOption[] = [];
@@ -67,7 +67,55 @@ export class AddMatchComponent {
     this.buildTournamentDropdown(allTournaments);
     console.log(this.playerDropdownOptions);
     console.log(this.tournamentDropdownOptions);
+    this.statusListener();
+  }
 
+  /**
+   * Build the player dropdown options
+   * @param {any[]} allPlayers - Array of all players
+   * @returns {void}
+   */
+  buildPlayerDropdown(allPlayers: any[]): void {
+    this.playerDropdownOptions = allPlayers.map((player) => {
+      return {
+        id: player.id,
+        name: `${player.firstName} ${player.lastName}`,
+      };
+    });
+  }
+
+  buildTournamentDropdown(allTournaments: any[]): void {
+    this.tournamentDropdownOptions = allTournaments.map((tournament) => {
+      return {
+        id: tournament.id,
+        name: tournament.name,
+      };
+    });
+  }
+
+  async onSubmit(): Promise<void> {
+    console.log(this.matchForm.value);
+    console.log('form submitted');
+
+    // check if the form is valid
+    if (!this.matchForm.valid) {
+      console.log('form is invalid');
+      return;
+    } 
+
+    // get the form values
+    const formValues = this.matchForm.value;
+    await this.firebaseService.addMatch(formValues);
+  }
+
+  get tournament() {
+    return this.matchForm.get('tournament')!;
+  }
+
+  /**
+   * Listen for changes to the status field, and update the validation rules for the set fields accordingly
+   */
+  statusListener() {
     this.matchForm.get('status')?.valueChanges.subscribe((value) => {
       console.log('status changed to ', value);
 
@@ -111,44 +159,5 @@ export class AddMatchComponent {
           ]);
       }
     });
-  }
-
-  /**
-   * Build the player dropdown options
-   * @param {any[]} allPlayers - Array of all players
-   * @returns {void}
-   */
-  buildPlayerDropdown(allPlayers: any[]): void {
-    this.playerDropdownOptions = allPlayers.map((player) => {
-      return {
-        id: player.id,
-        name: `${player.firstName} ${player.lastName}`,
-      };
-    });
-  }
-
-  buildTournamentDropdown(allTournaments: any[]): void {
-    this.tournamentDropdownOptions = allTournaments.map((tournament) => {
-      return {
-        id: tournament.id,
-        name: tournament.name,
-      };
-    });
-  }
-
-  onSubmit(): void {
-    console.log(this.matchForm.value);
-    console.log('form submitted');
-
-    // check if the form is valid
-    if (this.matchForm.valid) {
-      console.log('form is valid');
-    } else {
-      console.log('form is invalid');
-    }
-  }
-
-  get tournament() {
-    return this.matchForm.get('tournament')!;
   }
 }

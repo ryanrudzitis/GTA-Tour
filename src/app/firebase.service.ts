@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { doc, getDoc, getFirestore } from '@firebase/firestore';
+import { doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 
 @Injectable({
@@ -144,6 +144,71 @@ export class FirebaseService {
     const playersSnapshot = await getDocs(playersCollection);
     const players = playersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data()}));
     return players;
+  }
+
+  async addMatch(matchInfo: any): Promise<void> {
+    console.log("adding match to db");
+    console.log(matchInfo);
+
+    const formatOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+    let date = matchInfo.date.toLocaleDateString('en-US', formatOptions);
+    // remove second comma from date
+    date = date.replace(/,(?=[^,]*$)/, '');
+
+    const db = getFirestore();
+    const matchCollection = collection(db, 'tournaments', matchInfo.tournament, 'matches');
+    try {
+      await setDoc(doc(matchCollection), {
+        winner_id: matchInfo.winner,
+        loser_id: matchInfo.loser,
+        date: date,
+        round: matchInfo.round,
+        set1: matchInfo.set1,
+        set2: matchInfo.set2,
+        set3: matchInfo.set3,
+        status: matchInfo.status,
+      });
+      console.log("Document successfully written!");
+      await this.incrementWins(matchInfo.winner);
+      await this.incrementLosses(matchInfo.loser);
+      await this.incrementPoints(matchInfo.winner, 50);
+      console.log("Wins and losses incremented");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
+  }
+
+  async incrementWins(playerId: string): Promise<void> {
+    const db = getFirestore();
+    const userDoc = doc(db, 'users', playerId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (userData) {
+      const wins = userData['wins'] + 1;
+      await setDoc(userDoc, { wins: wins }, { merge: true });
+    }
+  }
+  async incrementLosses(playerId: string): Promise<void> {
+    const db = getFirestore();
+    const userDoc = doc(db, 'users', playerId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (userData) {
+      const losses = userData['losses'] + 1;
+      await setDoc(userDoc, { losses: losses }, { merge: true });
+    }
+  }
+
+  async incrementPoints(playerId: string, points: number): Promise<void> {
+    const db = getFirestore();
+    const userDoc = doc(db, 'users', playerId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (userData) {
+      const newPoints = userData['points'] + points;
+      await setDoc(userDoc, { points: newPoints }, { merge: true });
+    }
   }
 }
 

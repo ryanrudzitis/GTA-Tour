@@ -43,6 +43,7 @@ export class AuthService {
           email,
           wins: 0,
           losses: 0,
+          points: 0,
           role: 'normal',
         })
           .then(() => {
