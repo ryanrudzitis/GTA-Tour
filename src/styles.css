@@ -3,7 +3,7 @@
 @tailwind utilities;  
 
 body {
-  @apply bg-default;
+  /* @apply bg-default; */
 }
 
 html, body {
