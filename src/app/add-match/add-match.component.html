@@ -1,88 +1,91 @@
-<div class="h-full">
-  <div class="flex flex-col max-w-screen-sm p-4">
-    <h2 class="text-4xl font-bold mb-4">Add Match</h2>
-    <mat-spinner *ngIf="showSpinner" />
+<div class="bg-green-600">
+  <div class="flex flex-col p-4">
+    <h2 class="text-3xl font-bold mb-4">Add Match</h2>
+    <div *ngIf="showSpinner" class="h-screen">
+      <mat-spinner/>
+    </div>
     <form
       [formGroup]="matchForm"
       (ngSubmit)="onSubmit()"
       class="flex flex-col"
       *ngIf="!showSpinner"
     >
-      <div class="max-w-80 flex flex-col">
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Date</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            readonly
-            formControlName="date"
-          />
-          <mat-datepicker-toggle
-            matIconSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Tournament</mat-label>
-          <mat-select formControlName="tournament">
-            <mat-option
-              *ngFor="let tournamentOption of tournamentDropdownOptions"
-              [value]="tournamentOption.id"
-              >{{ tournamentOption.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Round</mat-label>
-          <mat-select formControlName="round">
-            <mat-option *ngFor="let round of roundOptions" [value]="round">{{
-              round
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Winner</mat-label>
-          <mat-select [(value)]="selectedWinner" formControlName="winner">
-            <mat-option
-              *ngFor="let player of playerDropdownOptions"
-              [value]="player.id"
-              >{{ player.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Loser</mat-label>
-          <mat-select formControlName="loser">
-            <mat-option
-              *ngFor="
-                let player of playerDropdownOptions | filter : selectedWinner
-              "
-              [value]="player.id"
-              >{{ player.name }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field hideRequiredMarker>
-          <mat-label>Status</mat-label>
-          <mat-select formControlName="status">
-            <mat-option *ngFor="let status of statusOptions" [value]="status">{{
-              status
-            }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="max-w-40">
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Date</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          readonly
+          formControlName="date"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Tournament</mat-label>
+        <mat-select formControlName="tournament">
+          <mat-option
+            *ngFor="let tournamentOption of tournamentDropdownOptions"
+            [value]="tournamentOption.id"
+            >{{ tournamentOption.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Round</mat-label>
+        <mat-select formControlName="round">
+          <mat-option *ngFor="let round of roundOptions" [value]="round">{{
+            round
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Winner</mat-label>
+        <mat-select [(value)]="selectedWinner" formControlName="winner">
+          <mat-option
+            *ngFor="let player of playerDropdownOptions"
+            [value]="player.id"
+            >{{ player.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Loser</mat-label>
+        <mat-select formControlName="loser">
+          <mat-option
+            *ngFor="
+              let player of playerDropdownOptions | filter : selectedWinner
+            "
+            [value]="player.id"
+            >{{ player.name }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field hideRequiredMarker>
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option *ngFor="let status of statusOptions" [value]="status">{{
+            status
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="flex gap-4">
+        <mat-form-field>
           <mat-label>Set 1</mat-label>
           <input matInput formControlName="set1" />
           <mat-hint>Eg. 6-1 or 7(8)-6(1)</mat-hint>
         </mat-form-field>
-        <mat-form-field class="max-w-40">
+        <mat-form-field>
           <mat-label>Set 2</mat-label>
           <input matInput formControlName="set2" />
         </mat-form-field>
-        <mat-form-field class="max-w-40">
+        <mat-form-field>
           <mat-label>Set 3</mat-label>
           <input matInput formControlName="set3" />
+          <mat-hint>Can be empty</mat-hint>
         </mat-form-field>
       </div>
       <button
@@ -90,7 +93,7 @@
         color="primary"
         type="submit"
         [disabled]="!matchForm.valid"
-        class="w-40"
+        class="w-40 mt-8"
       >
         Add Match
       </button>
