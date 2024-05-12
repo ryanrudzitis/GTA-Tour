@@ -9,6 +9,7 @@ import { SignInComponent } from './sign-in/sign-in.component';
 import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 import { AddMatchComponent } from './add-match/add-match.component';
+import { PlayerComponent } from './player/player.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'rankings', component: RankingsComponent},
   { path: 'add-match', component: AddMatchComponent},
+  { path: 'player/:id', component: PlayerComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 

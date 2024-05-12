@@ -1,1 +1,17 @@
-<p>player works!</p>
+<div class="p-4 h-full bg-green-600">
+  <mat-spinner *ngIf="showSpinner" />
+  <div *ngIf="!showSpinner">
+    <h2 class="text-3xl font-bold mb-4"> {{ player.firstName }} {{ player.lastName }} </h2>
+    <div class="flex gap-4 w-full text-lg">
+      <div>
+        Points: {{ player.points }}
+      </div>
+      <div>
+        Wins: {{ player.wins }}
+      </div>
+      <div>
+        Losses: {{ player.losses }}
+      </div>
+    </div>
+  </div>
+</div>

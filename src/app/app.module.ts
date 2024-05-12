@@ -30,6 +30,7 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
+import { PlayerComponent } from './player/player.component';
 
 const app = initializeApp(firebaseConfig);
 
@@ -46,6 +47,7 @@ const app = initializeApp(firebaseConfig);
     RankingsComponent,
     MatchComponent,
     AddMatchComponent,
+    PlayerComponent,
     FilterPipe
   ],
   imports: [
