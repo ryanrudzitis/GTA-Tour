@@ -8,7 +8,6 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./sign-in.component.css']
 })
 export class SignInComponent {
-
   invalidCredError = false;
   showSpinner = false;
   SignInForm = new FormGroup({
@@ -30,26 +29,18 @@ export class SignInComponent {
   ngOnInit(): void {
   }
 
-  onSubmit(): void {
+  async onSubmit(formDirective: any): Promise<void> {
     this.invalidCredError = false;
 
     if (!this.SignInForm.valid) {
-      let field = null;
-
-      if (this.email?.errors?.['required']) {
-        field = document.querySelector('#emailInput') as HTMLElement;
-      } else if (this.password?.errors?.['required']) {
-        field = document.querySelector('#passwordInput') as HTMLElement;
-      }
-      if (field) field.focus();
-      return;
+      console.log('Form is invalid');
     }
 
     this.showSpinner = true;
-    this.signIn();
+    await this.signIn(formDirective);
   }
 
-  signIn(): void {
+  async signIn(formDirective: any): Promise<void> {
     this.authService.signIn(this.email?.value as string, this.password?.value as string)
     .then(() => {
       console.log('Signed in');
@@ -57,16 +48,11 @@ export class SignInComponent {
     .catch((error) => {
       console.error('Error signing in:', error);
       if (error.code === 'auth/invalid-credential') {
-        //clear password field
-        this.SignInForm.patchValue({
-          password: ''
-        });
-        // focus on password field
-        const passwordField = document.querySelector('#passwordInput') as HTMLElement;
-        passwordField.focus();
-        // effectively clears form errors
-        this.SignInForm.markAsUntouched();
-
+        //reset form, but keep email first
+        const email = this.email?.value;
+        this.SignInForm.reset();
+        formDirective.resetForm();
+        if (email) this.email?.setValue(email);
         this.invalidCredError = true;
       } else {
         console.error('Error signing in:', error);
