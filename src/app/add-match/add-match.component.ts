@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import {
   FormControl,
@@ -33,6 +33,8 @@ export class AddMatchComponent {
     /(^[0-6]-[0-4]$|^[0-4]-[0-6]$|(7-5|5-7))|(^[7]\(\d+\)-[6]\(\d+\)$|^[6]\(\d+\)-[7]\(\d+\)$)/;
   incompleteScoreRegexUnrequired =
     /^$|(^[0-6]-[0-4]$|^[0-4]-[0-6]$|(7-5|5-7))|(^[7]\(\d+\)-[6]\(\d+\)$|^[6]\(\d+\)-[7]\(\d+\)$)/;
+
+  @ViewChild("top") topOfPage: ElementRef | undefined;
 
   roundOptions: string[] = ['Quarterfinals', 'Semifinals', 'Finals'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
@@ -114,22 +116,16 @@ export class AddMatchComponent {
     }
     try {
       await this.firebaseService.addMatch(formValues);
-      this._snackBar.open('Match added', 'Close', {
+      let snackBarRef = this._snackBar.open('Match added', 'Close', {
         duration: 5000,
       });
+
       this.matchForm.reset();
       formDirective.resetForm();
-
-      //reset all validators
-      // for (const field in this.matchForm.controls) {
-      //   this.matchForm.get(field)?.setErrors(null);
-      // }
-
       this.matchForm.controls['date'].setValue(new Date());
       this.matchForm.controls['status'].setValue('Final');
-      // this.matchForm.setErrors({ 'invalid': true });
-      // console.log(this.matchForm.valid);
-
+      // scroll to the top of the page
+      this.topOfPage?.nativeElement.scrollIntoView({ behavior: "smooth" });
       
     } catch (error) {
       console.error('Error adding match:', error);
