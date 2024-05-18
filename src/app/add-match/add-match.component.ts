@@ -2,10 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import {
   FormControl,
-  ReactiveFormsModule,
   FormGroup,
   Validators,
-  FormGroupDirective,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

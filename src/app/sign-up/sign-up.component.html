@@ -1,4 +1,4 @@
-<div class="h-screen">
+<div class="bg-green-600">
   <div class="container mx-auto p-6">
     <h1 class="text-4xl font-bold">Join the GTA Tour!</h1>
     <p class="py-6 text-xl">
@@ -9,96 +9,90 @@
     <form
       [formGroup]="signInForm"
       (ngSubmit)="onSubmit()"
-      class="flex flex-col gap-4 max-w-xs w-full"
+      class="flex flex-col max-w-xs gap-1 w-full"
     >
-      <label>
-        First name:
+      <mat-form-field>
+        <mat-label>First name</mat-label>
+        <mat-error *ngIf="firstName?.hasError('required')"
+          >First name is required</mat-error
+        >
         <input
+          matInput
           id="firstNameInput"
           type="text"
-          formControlName="first_name"
-          class="input input-bordered w-full max-w-xs"
+          formControlName="firstName"
         />
-        <div *ngIf="first_name?.invalid && first_name?.touched">
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.first_name.errors?.['required']"
-            >First name is required.</small
-          >
-        </div>
-      </label>
-      <label>
-        Last name:
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Last name</mat-label>
+        <mat-error *ngIf="lastName?.hasError('required')"
+          >Last name is required</mat-error
+        >
         <input
+          matInput
           id="lastNameInput"
           type="text"
-          formControlName="last_name"
-          class="input input-bordered w-full max-w-xs"
+          formControlName="lastName"
         />
-        <div *ngIf="last_name?.invalid && last_name?.touched">
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.last_name.errors?.['required']"
-            >Last name is required.</small
-          >
-        </div>
-      </label>
-      <!-- <label>Country:</label>
-      <select
-        id="country"
-        name="country"
-        type="text"
-        formControlName="country"
-        class="input input-bordered w-full max-w-xs"
-      >
-        <option *ngFor="let country of countryNames" [value]="country">
-          {{ country }}
-        </option>
-      </select> -->
-      <label>
-        Email:
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Country</mat-label>
+        <mat-error *ngIf="country?.hasError('required')"
+          >Country is required</mat-error
+        >
+        <mat-select
+          id="country"
+          name="country"
+          type="text"
+          formControlName="country"
+          class="w-full max-w-xs"
+        >
+          <mat-option *ngFor="let country of countryNames" [value]="country">
+            {{ country + " " + getCountryFlag(country) }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <mat-error *ngIf="email?.hasError('required')"
+          >Email is required</mat-error
+        >
+        <mat-error *ngIf="email?.hasError('email')">Invalid email</mat-error>
+        <input matInput id="emailInput" type="email" formControlName="email" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Password</mat-label>
+        <mat-error *ngIf="password?.hasError('required')"
+          >Password is required</mat-error
+        >
+        <mat-error *ngIf="password?.hasError('minlength')"
+          >Password must be at least 6 characters</mat-error
+        >
         <input
-          id="emailInput"
-          type="email"
-          formControlName="email"
-          class="input input-bordered w-full max-w-xs"
-        />
-        <div *ngIf="email?.invalid && email?.touched">
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.email.errors?.['required']"
-            >Email is required.</small
-          >
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.email.errors?.['email']"
-            >Email is invalid.</small
-          >
-        </div>
-      </label>
-      <label>
-        Password:
-        <input
+          matInput
           id="passwordInput"
           type="password"
           formControlName="password"
-          class="input input-bordered w-full max-w-xs"
         />
-        <div *ngIf="password?.invalid && password?.touched">
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.password.errors?.['required']"
-            >Password is required.</small
-          >
-          <small
-            class="text-red-700"
-            *ngIf="signInForm.controls.password.errors?.['minlength']"
-            >Password must be at least 6 characters.</small
-          >
-        </div>
-      </label>
-      <button type="submit" class="btn btn-primary">Join the Tour <span class="loading loading-spinner loading-sm" *ngIf="showSpinner"></span></button>
+      </mat-form-field>
+      <div class="flex gap-3 items-center">
+        <button
+          mat-raised-button
+          type="submit"
+          color="primary"
+          class="w-40"
+          [disabled]="!signInForm.valid"
+        >
+          Join the Tour
+        </button>
+        <mat-spinner *ngIf="showSpinner" diameter="30"></mat-spinner>
+      </div>
     </form>
-    <p class="mt-3">Already have an account? <a routerLink="/sign-in" routerLinkActive="active"><span class="text-blue-500">Sign in</span></a></p>
+    <p class="mt-3">
+      Already have an account?
+      <a routerLink="/sign-in" routerLinkActive="active"
+        ><span class="text-blue-700">Sign in</span></a
+      >
+    </p>
   </div>
 </div>

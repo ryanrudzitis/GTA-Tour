@@ -25,13 +25,12 @@ export class AuthService {
   }
 
   async signUp(
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string
+    userData: any
   ): Promise<void> {
     const auth = getAuth();
     const db = getFirestore();
+    const { email, password, firstName, lastName, country } = userData;
+    console.log(email, password, firstName, lastName, country);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
@@ -41,6 +40,7 @@ export class AuthService {
           firstName,
           lastName,
           email,
+          country,
           wins: 0,
           losses: 0,
           points: 0,
