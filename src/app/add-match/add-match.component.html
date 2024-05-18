@@ -5,7 +5,8 @@
   </div>
   <form
     [formGroup]="matchForm"
-    (ngSubmit)="onSubmit()"
+    #formDirective="ngForm"
+    (ngSubmit)="onSubmit(formDirective)"
     class="flex flex-col"
     *ngIf="!showSpinner"
   >

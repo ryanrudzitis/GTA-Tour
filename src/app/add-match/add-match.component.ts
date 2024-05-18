@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import {
   FormControl,
   ReactiveFormsModule,
   FormGroup,
   Validators,
+  FormGroupDirective,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -60,7 +61,9 @@ export class AddMatchComponent {
     status: new FormControl('Final', [Validators.required]),
   });
 
-  constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar) {}
+  constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar) {
+    
+  }
 
   async ngOnInit() {
     const allPlayers = await this.firebaseService.getAllPlayers();
@@ -68,7 +71,7 @@ export class AddMatchComponent {
     this.buildPlayerDropdown(allPlayers);
     this.buildTournamentDropdown(allTournaments);
     this.showSpinner = false;
-    this.statusListener();
+    // this.statusListener();
     this.tournamentListener();
   }
 
@@ -95,7 +98,7 @@ export class AddMatchComponent {
     });
   }
 
-  async onSubmit(): Promise<void> {
+  async onSubmit(formDirective: any): Promise<void> {
     if (!this.matchForm.valid) {
       console.log('form is invalid');
       return;
@@ -114,6 +117,19 @@ export class AddMatchComponent {
       this._snackBar.open('Match added', 'Close', {
         duration: 5000,
       });
+      this.matchForm.reset();
+      formDirective.resetForm();
+
+      //reset all validators
+      // for (const field in this.matchForm.controls) {
+      //   this.matchForm.get(field)?.setErrors(null);
+      // }
+
+      this.matchForm.controls['date'].setValue(new Date());
+      this.matchForm.controls['status'].setValue('Final');
+      // this.matchForm.setErrors({ 'invalid': true });
+      // console.log(this.matchForm.valid);
+
       
     } catch (error) {
       console.error('Error adding match:', error);
@@ -131,7 +147,6 @@ export class AddMatchComponent {
    */
   statusListener() {
     this.matchForm.get('status')?.valueChanges.subscribe((value) => {
-      console.log('status changed to ', value);
 
       if (value === 'Final') {
         this.matchForm
@@ -177,8 +192,7 @@ export class AddMatchComponent {
 
   tournamentListener() {
     this.matchForm.get('tournament')?.valueChanges.subscribe((value: any) => {
-      if (value.name === 'League Match') {
-        // hide the round field, and set the value to "NA"
+      if (value?.name === 'League Match') {
         this.matchForm.get('round')?.disable();
       } else {
         this.matchForm.get('round')?.enable();
