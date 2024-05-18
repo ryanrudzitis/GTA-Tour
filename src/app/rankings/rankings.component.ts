@@ -8,6 +8,7 @@ import { FirebaseService } from '../firebase.service';
 })
 export class RankingsComponent {
 
+  showSpinner = true;
   allPlayers: any[] = [];
   displayedColumns: string[] = ['rank', 'name', 'points'];
 
@@ -18,5 +19,6 @@ export class RankingsComponent {
     // sort players by points
     this.allPlayers.sort((a, b) => b.points - a.points);
     console.log(this.allPlayers);
+    this.showSpinner = false;
   }
 }

@@ -68,9 +68,8 @@ export class AddMatchComponent {
     this.buildPlayerDropdown(allPlayers);
     this.buildTournamentDropdown(allTournaments);
     this.showSpinner = false;
-    console.log(this.playerDropdownOptions);
-    console.log(this.tournamentDropdownOptions);
     this.statusListener();
+    this.tournamentListener();
   }
 
   /**
@@ -97,10 +96,6 @@ export class AddMatchComponent {
   }
 
   async onSubmit(): Promise<void> {
-    console.log(this.matchForm.value);
-    console.log('form submitted');
-
-    // check if the form is valid
     if (!this.matchForm.valid) {
       console.log('form is invalid');
       return;
@@ -109,6 +104,11 @@ export class AddMatchComponent {
     this._snackBar.open('Adding match...');
     // get the form values
     const formValues = this.matchForm.value;
+    console.log('formValues:', formValues);
+
+    if (formValues.round === undefined) { // league matches don't have rounds
+      formValues.round = 'NA';
+    }
     try {
       await this.firebaseService.addMatch(formValues);
       this._snackBar.open('Match added', 'Close', {
@@ -171,6 +171,17 @@ export class AddMatchComponent {
           ?.setValidators([
             Validators.pattern(this.incompleteScoreRegexUnrequired),
           ]);
+      }
+    });
+  }
+
+  tournamentListener() {
+    this.matchForm.get('tournament')?.valueChanges.subscribe((value: any) => {
+      if (value.name === 'League Match') {
+        // hide the round field, and set the value to "NA"
+        this.matchForm.get('round')?.disable();
+      } else {
+        this.matchForm.get('round')?.enable();
       }
     });
   }

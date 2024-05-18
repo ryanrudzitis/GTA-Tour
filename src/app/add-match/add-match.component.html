@@ -28,7 +28,7 @@
       <mat-select formControlName="tournament">
         <mat-option
           *ngFor="let tournamentOption of tournamentDropdownOptions"
-          [value]="tournamentOption.id"
+          [value]="tournamentOption"
           >{{ tournamentOption.name }}</mat-option
         >
       </mat-select>
@@ -74,14 +74,18 @@
         <mat-label>Set 1</mat-label>
         <input matInput formControlName="set1" />
         <mat-hint>Eg. 6-1 or 7(8)-6(1)</mat-hint>
+        <mat-error>Invalid format</mat-error>
       </mat-form-field>
       <mat-form-field>
         <mat-label>Set 2</mat-label>
         <input matInput formControlName="set2" />
+        <mat-error>Invalid format</mat-error>
+
       </mat-form-field>
       <mat-form-field>
         <mat-label>Set 3</mat-label>
         <input matInput formControlName="set3" />
+        <mat-error>Invalid format</mat-error>
         <mat-hint>Can be empty</mat-hint>
       </mat-form-field>
     </div>
