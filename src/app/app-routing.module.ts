@@ -10,13 +10,14 @@ import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 import { AddMatchComponent } from './add-match/add-match.component';
 import { PlayerComponent } from './player/player.component';
+import { authGuard } from './auth.guard';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'scores', component: ScoresComponent },
   { path: 'matches', component: MatchesComponent },
-  { path: 'sign-up', component: SignUpComponent },
-  { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent, canActivate: [authGuard] },
+  { path: 'sign-in', component: SignInComponent, canActivate: [authGuard] },
   { path: 'profile', component: ProfileComponent },
   { path: 'rankings', component: RankingsComponent},
   { path: 'add-match', component: AddMatchComponent},

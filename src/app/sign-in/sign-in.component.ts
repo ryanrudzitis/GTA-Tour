@@ -24,9 +24,12 @@ export class SignInComponent {
     return this.SignInForm.get('password');
   }
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService) { 
+    console.log("current user", this.authService.currentUser)
+  }
 
   ngOnInit(): void {
+
   }
 
   async onSubmit(formDirective: any): Promise<void> {

@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
+import { AuthService } from '../auth.service';
 import {
   FormControl,
   FormGroup,
@@ -8,11 +9,6 @@ import {
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface PlayerDropdownOption {
-  id: string;
-  name: string;
-}
-
-interface TournamentDropdownOption {
   id: string;
   name: string;
 }
@@ -36,7 +32,7 @@ export class AddMatchComponent {
 
   roundOptions: string[] = ['Quarterfinals', 'Semifinals', 'Finals'];
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
-  tournamentDropdownOptions: TournamentDropdownOption[] = [];
+  allTournaments: any[] = [];
   playerDropdownOptions: PlayerDropdownOption[] = [];
   selectedWinner: string = '';
   showSpinner: boolean = true;
@@ -61,17 +57,16 @@ export class AddMatchComponent {
     status: new FormControl('Final', [Validators.required]),
   });
 
-  constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar) {
-    
+  constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar, private authService: AuthService) {
+    console.log('current user', this.authService.currentUser)
   }
 
   async ngOnInit() {
     const allPlayers = await this.firebaseService.getAllPlayers();
-    const allTournaments = await this.firebaseService.getAllTournaments();
+    this.allTournaments = await this.firebaseService.getAllTournaments();
     this.buildPlayerDropdown(allPlayers);
-    this.buildTournamentDropdown(allTournaments);
     this.showSpinner = false;
-    // this.statusListener();
+    this.statusListener();
     this.tournamentListener();
   }
 
@@ -85,15 +80,6 @@ export class AddMatchComponent {
       return {
         id: player.id,
         name: `${player.firstName} ${player.lastName}`,
-      };
-    });
-  }
-
-  buildTournamentDropdown(allTournaments: any[]): void {
-    this.tournamentDropdownOptions = allTournaments.map((tournament) => {
-      return {
-        id: tournament.id,
-        name: tournament.name,
       };
     });
   }

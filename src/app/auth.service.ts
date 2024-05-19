@@ -7,6 +7,8 @@ import {
   User,
   signInWithEmailAndPassword,
   UserCredential,
+  setPersistence,
+  browserLocalPersistence,
 } from 'firebase/auth';
 import { Router } from '@angular/router';
 
@@ -15,18 +17,16 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
   currentUser: User | null = null;
-  // currentUser$: Observable<User | null>;
 
   constructor(private router: Router) {
     const auth = getAuth();
-      auth.onAuthStateChanged((user) => {
-        this.currentUser = user;
-      });
+    auth.onAuthStateChanged((user) => {
+      console.log('User state changed:', user);
+      this.currentUser = user;
+    });
   }
 
-  async signUp(
-    userData: any
-  ): Promise<void> {
+  async signUp(userData: any): Promise<void> {
     const auth = getAuth();
     const db = getFirestore();
     const { email, password, firstName, lastName, country } = userData;
@@ -60,17 +60,24 @@ export class AuthService {
       });
   }
 
-  async signIn(email: string, password: string): Promise<UserCredential> {
+  async signIn(email: string, password: string): Promise<any> {
     const auth = getAuth();
-    return signInWithEmailAndPassword(auth, email, password).then(
-      (userCredential) => {
-        // Signed in
-        this.currentUser = userCredential.user;
-        console.log('User signed in:', this.currentUser);
-        this.router.navigate(['/profile']);
-        return userCredential;
-      }
-    );
+    setPersistence(auth, browserLocalPersistence)
+      .then(async () => {
+        console.log('Persistence set');
+        signInWithEmailAndPassword(auth, email, password).then(
+          (userCredential) => {
+            // Signed in
+            this.currentUser = userCredential.user;
+            console.log('User signed in:', this.currentUser);
+            this.router.navigate(['/profile']);
+            return userCredential;
+          }
+        );
+      })
+      .catch((error) => {
+        console.error('Error signing in:', error);
+      });
   }
 
   async signOut(): Promise<void> {
