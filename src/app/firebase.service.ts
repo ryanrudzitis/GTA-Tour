@@ -166,21 +166,35 @@ export class FirebaseService {
     console.log(matchInfo);
 
     const formatOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    
     let localeString = matchInfo.date.toLocaleDateString('en-US', formatOptions);
     // remove second comma from date
     localeString = localeString.replace(/,(?=[^,]*$)/, '');
-    const isoString = this.toIsoString(matchInfo.date);
 
+    const isoString = this.toIsoString(matchInfo.date);
     const db = getFirestore();
     const matchCollection = collection(db, 'tournaments', matchInfo.tournament.id, 'matches');
+
+    let round;
+    if (matchInfo.round === undefined) { // league matches don't have rounds
+      round = {
+        name: 'NA',
+        value: 'NA'
+      }
+    } else {
+      round = {
+        name: matchInfo.round.name,
+        value: matchInfo.round.value
+      }
+    }
+
+
     try {
       await setDoc(doc(matchCollection), {
-        winner_id: matchInfo.winner,
-        loser_id: matchInfo.loser,
+        winner: matchInfo.winner,
+        loser: matchInfo.loser,
         date: isoString,
         localeDate: localeString,
-        round: matchInfo.round,
+        round: round,
         set1: matchInfo.set1,
         set2: matchInfo.set2,
         set3: matchInfo.set3,

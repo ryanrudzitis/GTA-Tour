@@ -39,7 +39,7 @@
       <mat-label>Round</mat-label>
       <mat-select formControlName="round">
         <mat-option *ngFor="let round of roundOptions" [value]="round">{{
-          round
+          round.name
         }}</mat-option>
       </mat-select>
     </mat-form-field>

@@ -30,7 +30,17 @@ export class AddMatchComponent {
 
   @ViewChild("top") topOfPage: ElementRef | undefined;
 
-  roundOptions: string[] = ['Quarterfinals', 'Semifinals', 'Finals'];
+  roundOptions: any[] = [ {
+    name: 'Quarterfinal',
+    value: 'qf'
+  }, {
+    name: 'Semifinal',
+    value: 'sf'
+  }, {
+    name: 'Final',
+    value: 'f'
+  
+  }]
   statusOptions: string[] = ['Final', 'Walkover', 'Retired'];
   allTournaments: any[] = [];
   playerDropdownOptions: PlayerDropdownOption[] = [];
@@ -95,9 +105,6 @@ export class AddMatchComponent {
     const formValues = this.matchForm.value;
     console.log('formValues:', formValues);
 
-    if (formValues.round === undefined) { // league matches don't have rounds
-      formValues.round = 'NA';
-    }
     try {
       await this.firebaseService.addMatch(formValues);
       let snackBarRef = this._snackBar.open('Match added', 'Close', {
@@ -108,6 +115,9 @@ export class AddMatchComponent {
       formDirective.resetForm();
       this.matchForm.controls['date'].setValue(new Date());
       this.matchForm.controls['status'].setValue('Final');
+      this.matchForm.controls['set1'].setValue('');
+      this.matchForm.controls['set2'].setValue('');
+      this.matchForm.controls['set3'].setValue('');
       // scroll to the top of the page
       this.topOfPage?.nativeElement.scrollIntoView({ behavior: "smooth" });
       
