@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
 import { collection, getDocs, query, where } from 'firebase/firestore';
+import { PointsService } from './points.service';
 
 interface Tournament {
   name: string;
@@ -11,9 +12,8 @@ interface Tournament {
 @Injectable({
   providedIn: 'root',
 })
-
 export class FirebaseService {
-  constructor() {}
+  constructor(private pointsService: PointsService) {}
 
   async getUserName(userId: string): Promise<string> {
     const db = getFirestore();
@@ -65,18 +65,22 @@ export class FirebaseService {
     const db = getFirestore();
     const tournamentsCollection = collection(db, 'tournaments');
     const tournamentsSnapshot = await getDocs(tournamentsCollection);
-    const tournaments = tournamentsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() as Tournament }));
+    const tournaments = tournamentsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Tournament),
+    }));
     // sort tournaments by name
     tournaments.sort((a, b) => a.name.localeCompare(b.name));
     // put tournament with name "League Match" at the front
-    const leagueMatches = tournaments.find(tournament => tournament.name === "League Match");
+    const leagueMatches = tournaments.find(
+      (tournament) => tournament.name === 'League Match'
+    );
     if (leagueMatches) {
       tournaments.splice(tournaments.indexOf(leagueMatches), 1);
       tournaments.unshift(leagueMatches);
     }
     return tournaments;
   }
-
 
   //TODO: function may be redundant
   /**
@@ -157,58 +161,80 @@ export class FirebaseService {
     const db = getFirestore();
     const playersCollection = collection(db, 'users');
     const playersSnapshot = await getDocs(playersCollection);
-    const players = playersSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data()}));
+    const players = playersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
     return players;
   }
 
   async addMatch(matchInfo: any): Promise<void> {
-    console.log("adding match to db");
+    console.log('adding match to db');
     console.log(matchInfo);
 
-    const formatOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-    let localeString = matchInfo.date.toLocaleDateString('en-US', formatOptions);
+    const formatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+    };
+    let localeString = matchInfo.date.toLocaleDateString(
+      'en-US',
+      formatOptions
+    );
     // remove second comma from date
     localeString = localeString.replace(/,(?=[^,]*$)/, '');
 
     const isoString = this.toIsoString(matchInfo.date);
     const db = getFirestore();
-    const matchCollection = collection(db, 'tournaments', matchInfo.tournament.id, 'matches');
+    const matchCollection = collection(
+      db,
+      'tournaments',
+      matchInfo.tournament.id,
+      'matches'
+    );
 
     let round;
-    if (matchInfo.round === undefined) { // league matches don't have rounds
+    if (matchInfo.round === undefined) {
+      // league matches don't have rounds
       round = {
-        name: 'NA',
-        value: 'NA'
-      }
+        name: 'League Match',
+        value: 'lm',
+      };
     } else {
       round = {
         name: matchInfo.round.name,
-        value: matchInfo.round.value
-      }
+        value: matchInfo.round.value,
+      };
     }
 
+    const { winner, loser, set1, set2, set3, status, tournament } = matchInfo;
 
     try {
       await setDoc(doc(matchCollection), {
-        winner: matchInfo.winner,
-        loser: matchInfo.loser,
+        winner: winner,
+        loser: loser,
         date: isoString,
         localeDate: localeString,
         round: round,
-        set1: matchInfo.set1,
-        set2: matchInfo.set2,
-        set3: matchInfo.set3,
-        status: matchInfo.status,
+        set1: set1,
+        set2: set2,
+        set3: set3,
+        status: status,
       });
-      console.log("Document successfully written!");
-      await this.incrementWins(matchInfo.winner);
-      await this.incrementLosses(matchInfo.loser);
-      await this.incrementPoints(matchInfo.winner, 50);
-      console.log("Wins and losses incremented");
+      console.log('Document successfully written!');
+      await this.incrementField(winner, 'wins');
+      await this.incrementField(loser, 'losses');
+      await this.incrementPoints(
+        winner,
+        loser,
+        tournament.level.value,
+        round.value
+      );
+      console.log('Wins and losses incremented');
     } catch (e) {
-      console.error("Error adding document: ", e);
+      console.error('Error adding document: ', e);
     }
-
   }
 
   /**
@@ -217,53 +243,93 @@ export class FirebaseService {
    */
   toIsoString(date: Date) {
     var tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num: any) {
-            return (num < 10 ? '0' : '') + num;
-        };
-  
-    return date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) +
-        '-' + pad(date.getDate()) +
-        'T' + pad(date.getHours()) +
-        ':' + pad(date.getMinutes()) +
-        ':' + pad(date.getSeconds()) 
-        // +
-        // dif + pad(Math.floor(Math.abs(tzo) / 60)) +
-        // ':' + pad(Math.abs(tzo) % 60)
-        ;
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num: any) {
+        return (num < 10 ? '0' : '') + num;
+      };
+
+    return (
+      date.getFullYear() +
+      '-' +
+      pad(date.getMonth() + 1) +
+      '-' +
+      pad(date.getDate()) +
+      'T' +
+      pad(date.getHours()) +
+      ':' +
+      pad(date.getMinutes()) +
+      ':' +
+      pad(date.getSeconds())
+      // +
+      // dif + pad(Math.floor(Math.abs(tzo) / 60)) +
+      // ':' + pad(Math.abs(tzo) % 60)
+    );
   }
 
-  async incrementWins(playerId: string): Promise<void> {
+  async incrementField(playerId: string, field: string): Promise<void> {
     const db = getFirestore();
     const userDoc = doc(db, 'users', playerId);
     const userSnap = await getDoc(userDoc);
     const userData = userSnap.data();
     if (userData) {
-      const wins = userData['wins'] + 1;
-      await setDoc(userDoc, { wins: wins }, { merge: true });
-    }
-  }
-  async incrementLosses(playerId: string): Promise<void> {
-    const db = getFirestore();
-    const userDoc = doc(db, 'users', playerId);
-    const userSnap = await getDoc(userDoc);
-    const userData = userSnap.data();
-    if (userData) {
-      const losses = userData['losses'] + 1;
-      await setDoc(userDoc, { losses: losses }, { merge: true });
+      const newField = userData[field] + 1;
+      await setDoc(userDoc, { [field]: newField }, { merge: true });
     }
   }
 
-  async incrementPoints(playerId: string, points: number): Promise<void> {
+  // async incrementPoints(playerId: string, points: number): Promise<void> {
+  //   const db = getFirestore();
+  //   const userDoc = doc(db, 'users', playerId);
+  //   const userSnap = await getDoc(userDoc);
+  //   const userData = userSnap.data();
+  //   if (userData) {
+  //     const newPoints = userData['points'] + points;
+  //     await setDoc(userDoc, { points: newPoints }, { merge: true });
+  //   }
+  // }
+
+  async incrementPoints(
+    winnerId: string,
+    loserId: string,
+    tournamentLevel: string,
+    matchLevel: string
+  ): Promise<void> {
     const db = getFirestore();
-    const userDoc = doc(db, 'users', playerId);
-    const userSnap = await getDoc(userDoc);
-    const userData = userSnap.data();
-    if (userData) {
-      const newPoints = userData['points'] + points;
-      await setDoc(userDoc, { points: newPoints }, { merge: true });
+    const points = this.pointsService.getPoints(tournamentLevel, matchLevel);
+    console.log('points:', points);
+    if (tournamentLevel === 'lm') {
+      await this.leagueMatchPoints(winnerId, loserId, points);
+      return;
+    } 
+    const winnerDoc = doc(db, 'users', winnerId);
+    const loserDoc = doc(db, 'users', loserId);
+    const winnerSnap = await getDoc(winnerDoc);
+    const loserSnap = await getDoc(loserDoc);
+    const winnerData = winnerSnap.data();
+    const loserData = loserSnap.data();
+
+    // if (userData) {
+    //   const newPoints = userData['points'] + points;
+    //   await setDoc(userDoc, { points: newPoints }, { merge: true });
+    // }
+  }
+
+  async leagueMatchPoints(winnerId: string, loserId: string, winnerPoints: number): Promise<void> {
+    const loserPoints = -10;
+    const db = getFirestore();
+    const winnerDoc = doc(db, 'users', winnerId);
+    const loserDoc = doc(db, 'users', loserId);
+    const winnerSnap = await getDoc(winnerDoc);
+    const loserSnap = await getDoc(loserDoc);
+    const winnerData = winnerSnap.data();
+    const loserData = loserSnap.data();
+    if (winnerData && loserData) {
+      const newWinnerPoints = winnerData['points'] + winnerPoints;
+      const newLoserPoints = loserData['points'] + loserPoints;
+      await setDoc(winnerDoc, { points: newWinnerPoints }, { merge: true });
+      await setDoc(loserDoc, { points: newLoserPoints }, { merge: true });
     }
+
+
   }
 }
-
