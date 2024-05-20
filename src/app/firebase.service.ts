@@ -13,11 +13,13 @@ interface Tournament {
   providedIn: 'root',
 })
 export class FirebaseService {
-  constructor(private pointsService: PointsService) {}
+  private db = getFirestore();
+
+  constructor(private pointsService: PointsService) {
+  }
 
   async getUserName(userId: string): Promise<string> {
-    const db = getFirestore();
-    const userDoc = doc(db, 'users', userId);
+    const userDoc = doc(this.db, 'users', userId);
     const userSnap = await getDoc(userDoc);
     const userData = userSnap.data();
     if (!userData) {
@@ -33,8 +35,7 @@ export class FirebaseService {
    * @returns {Promise<any>} - The user information which includes first name, last name, and email
    */
   async getUserInfo(userId: string): Promise<any> {
-    const db = getFirestore();
-    const userDoc = doc(db, 'users', userId);
+    const userDoc = doc(this.db, 'users', userId);
     const userSnap = await getDoc(userDoc);
     if (userSnap.exists()) {
       return userSnap.data();
@@ -49,9 +50,8 @@ export class FirebaseService {
    * @returns {Promise<any>} - Array of matches in the tournament
    */
   async getMatchesInTournament(tournamentId: string): Promise<any> {
-    const db = getFirestore();
     const matchesCollection = collection(
-      db,
+      this.db,
       'tournaments',
       tournamentId,
       'matches'
@@ -62,8 +62,7 @@ export class FirebaseService {
   }
 
   async getAllTournaments(): Promise<any> {
-    const db = getFirestore();
-    const tournamentsCollection = collection(db, 'tournaments');
+    const tournamentsCollection = collection(this.db, 'tournaments');
     const tournamentsSnapshot = await getDocs(tournamentsCollection);
     const tournaments = tournamentsSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -88,8 +87,7 @@ export class FirebaseService {
    * @returns {Promise<string[]>} - Array of tournament ids
    */
   async getAllTournamentIds(): Promise<string[]> {
-    const db = getFirestore();
-    const tournamentsCollection = collection(db, 'tournaments');
+    const tournamentsCollection = collection(this.db, 'tournaments');
     const tournamentIds: string[] = [];
 
     const tournamentSnapshot = await getDocs(tournamentsCollection);
@@ -101,8 +99,7 @@ export class FirebaseService {
   }
 
   async getTournamentName(tournamentId: string): Promise<string> {
-    const db = getFirestore();
-    const tournamentDoc = doc(db, 'tournaments', tournamentId);
+    const tournamentDoc = doc(this.db, 'tournaments', tournamentId);
     const tournamentSnap = await getDoc(tournamentDoc);
     const tournamentData = tournamentSnap.data();
     if (tournamentData) {
@@ -158,8 +155,7 @@ export class FirebaseService {
    * @returns {Promise<any>} - Array of all players
    */
   async getAllPlayers(): Promise<any> {
-    const db = getFirestore();
-    const playersCollection = collection(db, 'users');
+    const playersCollection = collection(this.db, 'users');
     const playersSnapshot = await getDocs(playersCollection);
     const players = playersSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -168,6 +164,11 @@ export class FirebaseService {
     return players;
   }
 
+  /**
+   * Add a match to the database
+   * @param {any} matchInfo - The match information
+   * @returns {void}
+   */
   async addMatch(matchInfo: any): Promise<void> {
     console.log('adding match to db');
     console.log(matchInfo);
@@ -186,9 +187,8 @@ export class FirebaseService {
     localeString = localeString.replace(/,(?=[^,]*$)/, '');
 
     const isoString = this.toIsoString(matchInfo.date);
-    const db = getFirestore();
     const matchCollection = collection(
-      db,
+      this.db,
       'tournaments',
       matchInfo.tournament.id,
       'matches'
@@ -266,9 +266,14 @@ export class FirebaseService {
     );
   }
 
+  /**
+   * Increment a field in the user document, either wins or losses
+   * @param {string} playerId - The id of the player
+   * @param {string} field - The field to increment, either 'wins' or 'losses'
+   * @returns {void}
+   */
   async incrementField(playerId: string, field: string): Promise<void> {
-    const db = getFirestore();
-    const userDoc = doc(db, 'users', playerId);
+    const userDoc = doc(this.db, 'users', playerId);
     const userSnap = await getDoc(userDoc);
     const userData = userSnap.data();
     if (userData) {
@@ -277,59 +282,69 @@ export class FirebaseService {
     }
   }
 
-  // async incrementPoints(playerId: string, points: number): Promise<void> {
-  //   const db = getFirestore();
-  //   const userDoc = doc(db, 'users', playerId);
-  //   const userSnap = await getDoc(userDoc);
-  //   const userData = userSnap.data();
-  //   if (userData) {
-  //     const newPoints = userData['points'] + points;
-  //     await setDoc(userDoc, { points: newPoints }, { merge: true });
-  //   }
-  // }
-
+  /**
+   * Increment points for a match
+   * @param {string} winnerId - The id of the winner
+   * @param {string} loserId - The id of the loser
+   * @param {string} tournamentLevel - The level of the tournament
+   * @param {string} matchLevel - The level of the match
+   * @returns {void}
+   * 
+   */
   async incrementPoints(
     winnerId: string,
     loserId: string,
     tournamentLevel: string,
     matchLevel: string
   ): Promise<void> {
-    const db = getFirestore();
     const points = this.pointsService.getPoints(tournamentLevel, matchLevel);
-    console.log('points:', points);
-    if (tournamentLevel === 'lm') {
+    if (tournamentLevel === 'lm') { // league match
       await this.leagueMatchPoints(winnerId, loserId, points);
       return;
-    } 
-    const winnerDoc = doc(db, 'users', winnerId);
-    const loserDoc = doc(db, 'users', loserId);
-    const winnerSnap = await getDoc(winnerDoc);
-    const loserSnap = await getDoc(loserDoc);
-    const winnerData = winnerSnap.data();
-    const loserData = loserSnap.data();
+    } else {
+      for (const id of [winnerId, loserId]) {
+        await this.updateUserPoints(id, points);
+      }
 
-    // if (userData) {
-    //   const newPoints = userData['points'] + points;
-    //   await setDoc(userDoc, { points: newPoints }, { merge: true });
-    // }
+      if (matchLevel === 'f') {
+        console.log("need to add winner points for winning the final");
+        const winnerPoints = this.pointsService.getPoints(tournamentLevel, 'w');
+        await this.updateUserPoints(winnerId, winnerPoints);
+      }
+    }
   }
 
+  /**
+   * Increment points for a league match. Has to be done separately because unlike tournaments, losers lose points
+   * @param {string} winnerId - The id of the winner
+   * @param {string} loserId - The id of the loser
+   * @param {number} winnerPoints - The number of points the winner gets
+   * @returns {void}
+   * 
+   */
   async leagueMatchPoints(winnerId: string, loserId: string, winnerPoints: number): Promise<void> {
     const loserPoints = -10;
-    const db = getFirestore();
-    const winnerDoc = doc(db, 'users', winnerId);
-    const loserDoc = doc(db, 'users', loserId);
-    const winnerSnap = await getDoc(winnerDoc);
-    const loserSnap = await getDoc(loserDoc);
-    const winnerData = winnerSnap.data();
-    const loserData = loserSnap.data();
-    if (winnerData && loserData) {
-      const newWinnerPoints = winnerData['points'] + winnerPoints;
-      const newLoserPoints = loserData['points'] + loserPoints;
-      await setDoc(winnerDoc, { points: newWinnerPoints }, { merge: true });
-      await setDoc(loserDoc, { points: newLoserPoints }, { merge: true });
-    }
-
-
+    this.updateUserPoints(winnerId, winnerPoints);
+    this.updateUserPoints(loserId, loserPoints);
   }
+
+  /**
+   * Update the points of a user, by specifiying how many points to add
+   * @param {string} userId - The id of the user
+   * @param {number} pointsToAdd - The number of points to add
+   * @returns {void}
+   * 
+   */
+  private async updateUserPoints(userId: string, pointsToAdd: number): Promise<void> {
+    const userDoc = doc(this.db, 'users', userId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (userData) {
+      const newPoints = userData['points'] + pointsToAdd;
+      await setDoc(userDoc, { points: newPoints }, { merge: true });
+    } else {
+      console.error(`User with ID ${userId} not found`);
+    }
+  }
+  
 }
