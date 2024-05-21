@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
+import { flag, code, name, countries } from 'country-emoji';
+
 
 @Component({
   selector: 'app-rankings',
@@ -20,5 +22,9 @@ export class RankingsComponent {
     this.allPlayers.sort((a, b) => b.points - a.points);
     console.log(this.allPlayers);
     this.showSpinner = false;
+  }
+
+  getFlag(country: string): string | undefined {
+    return flag(country);
   }
 }
