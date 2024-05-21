@@ -81,6 +81,13 @@ export class FirebaseService {
     return tournaments;
   }
 
+  async getAllMatches(): Promise<any> {
+    const matchesCollection = collection(this.db, 'matches');
+    const matchesSnapshot = await getDocs(matchesCollection);
+    const matches = matchesSnapshot.docs.map((doc) => doc.data());
+    return matches;
+  }
+
   //TODO: function may be redundant
   /**
    * Get all tournament ids from the database
@@ -104,6 +111,17 @@ export class FirebaseService {
     const tournamentData = tournamentSnap.data();
     if (tournamentData) {
       return tournamentData['name'];
+    } else {
+      return '';
+    }
+  }
+
+  async getPlayerName(playerId: string): Promise<string> {
+    const playerDoc = doc(this.db, 'users', playerId);
+    const playerSnap = await getDoc(playerDoc);
+    const playerData = playerSnap.data();
+    if (playerData) {
+      return `${playerData['firstName']} ${playerData['lastName']}`;
     } else {
       return '';
     }

@@ -1,3 +1,9 @@
-<div class="h-screen">
-  <button class="btn btn-primary" routerLink="/add-match">Add Match</button>
+<div class="h-screen bg-green-600 p-4">
+  <h2 class="text-3xl font-bold mb-4">Matches</h2>
+  <mat-spinner *ngIf="showSpinner" class="mx-auto"></mat-spinner>
+  <div *ngIf="!showSpinner" class="flex flex-col gap-4">
+    <div *ngFor="let match of matches">
+      <app-match [match]="match" [showTournament]="true"></app-match>
+    </div>
+  <button class="btn btn-primary mt-4" routerLink="/add-match">Add Match</button>
 </div>
