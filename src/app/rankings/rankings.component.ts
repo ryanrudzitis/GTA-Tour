@@ -24,6 +24,11 @@ export class RankingsComponent {
     this.showSpinner = false;
   }
 
+  /**
+   * Get the flag emoji for a country
+   * @param country The country name
+   * @returns The flag emoji for the country
+   */
   getFlag(country: string): string | undefined {
     return flag(country);
   }

@@ -187,13 +187,8 @@ export class FirebaseService {
     localeString = localeString.replace(/,(?=[^,]*$)/, '');
 
     const isoString = this.toIsoString(matchInfo.date);
-    const matchCollection = collection(
-      this.db,
-      'tournaments',
-      matchInfo.tournament.id,
-      'matches'
-    );
-
+    const matchesCollection = collection(this.db, 'matches');
+    
     let round;
     if (matchInfo.round === undefined) {
       // league matches don't have rounds
@@ -211,11 +206,12 @@ export class FirebaseService {
     const { winner, loser, set1, set2, set3, status, tournament } = matchInfo;
 
     try {
-      await setDoc(doc(matchCollection), {
+      await setDoc(doc(matchesCollection), {
         winner: winner,
         loser: loser,
         date: isoString,
-        localeDate: localeString,
+        dateString: localeString,
+        tournament: tournament.id,
         round: round,
         set1: set1,
         set2: set2,

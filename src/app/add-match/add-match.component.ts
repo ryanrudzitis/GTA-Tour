@@ -2,6 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import { AuthService } from '../auth.service';
 import {
+  AbstractControl,
   FormControl,
   FormGroup,
   Validators,
@@ -128,14 +129,19 @@ export class AddMatchComponent {
 
   }
 
-  get tournament() {
+  /**
+   * Get the tournament field
+   * @returns {AbstractControl}
+   */
+  get tournament(): AbstractControl {
     return this.matchForm.get('tournament')!;
   }
 
   /**
    * Listen for changes to the status field, and update the validation rules for the set fields accordingly
+   * @returns {void}
    */
-  statusListener() {
+  statusListener(): void {
     this.matchForm.get('status')?.valueChanges.subscribe((value) => {
 
       if (value === 'Final') {
@@ -180,7 +186,11 @@ export class AddMatchComponent {
     });
   }
 
-  tournamentListener() {
+  /**
+   * Listen for changes to the tournament field, and disables the round field if the tournament is a league match
+   * @returns {void}
+   */
+  tournamentListener(): void {
     this.matchForm.get('tournament')?.valueChanges.subscribe((value: any) => {
       if (value?.name === 'League Match') {
         this.matchForm.get('round')?.disable();
