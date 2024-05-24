@@ -1,15 +1,13 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from './auth.service';
+import { Auth, user } from '@angular/fire/auth';
 import { inject } from '@angular/core';
+import { map } from 'rxjs';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = () => {
   const router = inject(Router);
-  const authService = inject(AuthService);
-  if (authService.currentUser) {
-    console.log('User is logged in guard');
-    router.navigate(['/home']);
-    return false;
-  }
-  console.log('User is not logged in guard');
-  return true;
+  const auth = inject(Auth);
+  
+  return user(auth).pipe(
+    map((userOrNull: any) => !userOrNull || router.parseUrl('/home'))
+  );
 };

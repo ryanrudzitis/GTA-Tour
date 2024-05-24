@@ -31,6 +31,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
 import { PlayerComponent } from './player/player.component';
+import { initializeApp as initializeApp_alias, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
 
 const app = initializeApp(firebaseConfig);
 
@@ -70,7 +74,12 @@ const app = initializeApp(firebaseConfig);
     MatSnackBarModule,
     MatTableModule
   ],
-  providers: [],
+  providers: [
+    provideFirebaseApp(() => initializeApp({"projectId":"gta-tour-rankings","appId":"1:429267161229:web:90db2dc2eef32d13a812c4","storageBucket":"gta-tour-rankings.appspot.com","apiKey":"AIzaSyCfHY_G8gTiGn6GdrlOG8K_kLbUncXSdCM","authDomain":"gta-tour-rankings.firebaseapp.com","messagingSenderId":"429267161229"})),
+    provideAuth(() => getAuth()),
+    provideFirestore(() => getFirestore()),
+    provideFunctions(() => getFunctions())
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

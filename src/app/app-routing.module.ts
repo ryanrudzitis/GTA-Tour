@@ -11,6 +11,7 @@ import { RankingsComponent } from './rankings/rankings.component';
 import { AddMatchComponent } from './add-match/add-match.component';
 import { PlayerComponent } from './player/player.component';
 import { authGuard } from './auth.guard';
+import { noUserGuard } from './no-user.guard';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -18,9 +19,9 @@ const routes: Routes = [
   { path: 'matches', component: MatchesComponent },
   { path: 'sign-up', component: SignUpComponent, canActivate: [authGuard] },
   { path: 'sign-in', component: SignInComponent, canActivate: [authGuard] },
-  { path: 'profile', component: ProfileComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [noUserGuard] },
   { path: 'rankings', component: RankingsComponent},
-  { path: 'add-match', component: AddMatchComponent},
+  { path: 'add-match', component: AddMatchComponent, canActivate: [noUserGuard] },
   { path: 'player/:id', component: PlayerComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
