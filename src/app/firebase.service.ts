@@ -49,6 +49,8 @@ export class FirebaseService {
     const matchesQuery = query(matchesCollection, or(where('winner', '==', userId), where('loser', '==', userId)));
     const matchesSnapshot = await getDocs(matchesQuery);
     const matches = matchesSnapshot.docs.map((doc) => doc.data());
+    //sort matches by date lexographically, with most recent first
+    matches.sort((a, b) => b['date'].localeCompare(a['date']));
     return matches;
   }
 

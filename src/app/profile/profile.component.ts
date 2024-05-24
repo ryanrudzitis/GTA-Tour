@@ -21,6 +21,7 @@ export class ProfileComponent {
   ) {}
 
   matches: any[] = [];
+  showSpinner = true;
 
   async ngOnInit(): Promise<void> {
     const auth = getAuth();
@@ -28,11 +29,11 @@ export class ProfileComponent {
     auth.onAuthStateChanged(async (user) => {
       this.authService.currentUser = user;
       await this.getUserData();
-      // this.matches = await this.firebaseService.getMatchesForPlayer(
-      //   this.authService.currentUser?.uid as string
-      // );
-      // console.log('these are matches in profile', this.matches);
-      
+      this.matches = await this.firebaseService.getMatchesForUser(
+        this.authService.currentUser?.uid as string
+      );
+      console.log('these are matches in profile', this.matches);
+      this.showSpinner = false;
     });
   }
 
