@@ -62,22 +62,20 @@ export class AuthService {
 
   async signIn(email: string, password: string): Promise<any> {
     const auth = getAuth();
-    setPersistence(auth, browserLocalPersistence)
-      .then(async () => {
-        console.log('Persistence set');
-        signInWithEmailAndPassword(auth, email, password).then(
-          (userCredential) => {
-            // Signed in
-            this.currentUser = userCredential.user;
-            console.log('User signed in:', this.currentUser);
-            this.router.navigate(['/profile']);
-            return userCredential;
-          }
-        );
-      })
-      .catch((error) => {
-        console.error('Error signing in:', error);
-      });
+    return setPersistence(auth, browserLocalPersistence).then(async () => {
+      return signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          this.currentUser = userCredential.user;
+          console.log('User signed in:', this.currentUser);
+          this.router.navigate(['/profile']);
+          return userCredential;
+        })
+        .catch((error) => {
+          console.error('Error signing in here:', error);
+          throw error;
+        });
+    });
   }
 
   async signOut(): Promise<void> {
