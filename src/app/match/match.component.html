@@ -14,7 +14,7 @@
       {{ getFlag(winnerInfo.country) }} <a [routerLink]="['/player', winner]" class="text-blue-600">{{ getAbbreviatedName(winnerName) }}</a>
       <mat-icon class="scale-90 text-green-500">done</mat-icon>
     </div>
-    <div class="">
+    <div class="whitespace-pre">
       {{ winnerSetScores }}
     </div>
   </div>
@@ -22,7 +22,7 @@
     <div>
       {{ getFlag(loserInfo.country) }} <a [routerLink]="['/player', loser]" class="text-blue-600">{{ getAbbreviatedName(loserName) }}</a>
     </div>
-    <div class="">
+    <div class="whitespace-pre">
       {{ loserSetScores }}
     </div>
   </div>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-player',
@@ -8,25 +9,18 @@ import { FirebaseService } from '../firebase.service';
 })
 export class PlayerComponent {
 
-  playerId: string | undefined;
+  playerId: string = '';
   player: any;
+  playerMatches: any[] = [];
   showSpinner = true;
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(private firebaseService: FirebaseService, private route: ActivatedRoute) { }
 
   async ngOnInit(): Promise<void> {
-    // get the id that was passed in the URL
-    this.playerId = window.location.href.split('/').pop();
-    if (!this.playerId) {
-      console.error('Player ID not found in URL');
-      return;
-    }
-
-    this.player = await this.firebaseService.getUserInfo(this.playerId);
-    console.log(this.player);
-    this.showSpinner = false;
-
+    this.route.params.subscribe(async params => {
+      this.playerId = params['id'];
+      this.player = await this.firebaseService.getUserInfo(this.playerId);
+      this.playerMatches = await this.firebaseService.getMatchesForUser(this.playerId);
+      this.showSpinner = false;
+    });
   }
-
-
-
 }

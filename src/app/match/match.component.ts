@@ -81,9 +81,9 @@ export class MatchComponent {
     let set3;
     if (this.set3 != '') {
       set3 = this.set3.split('-')[0];
-      this.winnerSetScores = set1 + '   ' + set2 + '   ' + set3;
+      this.winnerSetScores = set1 + '  ' + set2 + '  ' + set3;
     } else {
-      this.winnerSetScores = set1 + '   ' + set2;
+      this.winnerSetScores = set1 + '  ' + set2;
     }
     
   }
@@ -94,9 +94,9 @@ export class MatchComponent {
     let set3;
     if (this.set3 != '') {
       set3 = this.set3.split('-')[1];
-      this.loserSetScores = set1 + '\t' + set2 + '\t' + set3;
+      this.loserSetScores = set1 +  '  ' + set2 + '  ' + set3;
     } else {
-      this.loserSetScores = set1 + '\t' + set2;
+      this.loserSetScores = set1 + '  ' + set2;
     }
   }
 }
