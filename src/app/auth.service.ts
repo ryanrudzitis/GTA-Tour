@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { Functions, getFunctions, httpsCallable, httpsCallableFromURL } from "firebase/functions";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -29,8 +30,11 @@ export class AuthService {
   async signUp(userData: any): Promise<void> {
     const auth = getAuth();
     const db = getFirestore();
-    const { email, password, firstName, lastName, country } = userData;
-    console.log(email, password, firstName, lastName, country);
+    const { email, password, firstName, lastName, country, accessCode } = userData;
+
+    if (!await this.checkAccessCode(accessCode)) {
+      throw Error('Invalid access code');
+    } 
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in
@@ -54,10 +58,19 @@ export class AuthService {
           });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        console.error('Error signing up:', error);
       });
+  }
+
+  async checkAccessCode(accessCode: string): Promise<boolean> {
+    const functions = getFunctions();
+    const verifyAccessCode = httpsCallable(functions, 'verifyAccessCode');
+    return verifyAccessCode({ code: accessCode }).then((result) => {
+      return true;
+    }).catch((error) => {
+      console.error('Error calling function:', error);
+      return false;
+    });
   }
 
   async signIn(email: string, password: string): Promise<any> {

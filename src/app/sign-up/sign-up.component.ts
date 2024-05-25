@@ -15,6 +15,8 @@ export class SignUpComponent {
     .sort();
 
   showSpinner = false;
+  isError = false;
+  errorText = '';
 
   signInForm = new FormGroup({
     firstName: new FormControl('', [Validators.required]),
@@ -25,6 +27,7 @@ export class SignUpComponent {
       Validators.required,
       Validators.minLength(6),
     ]),
+    accessCode: new FormControl('', [Validators.required]),
   });
 
   get firstName() {
@@ -42,6 +45,9 @@ export class SignUpComponent {
   get password() {
     return this.signInForm.get('password');
   }
+  get accessCode() {
+    return this.signInForm.get('access_code');
+  }
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -58,7 +64,21 @@ export class SignUpComponent {
     }
 
     this.showSpinner = true;
-    await this.authService.signUp(this.signInForm.value);
-    this.showSpinner = false;
+    this.isError = false;
+    this.errorText = '';
+    await this.authService
+      .signUp(this.signInForm.value)
+      .then(() => {
+        console.log('User signed up:', this.authService.currentUser);
+      })
+      .catch((error) => {
+        this.isError = true;
+        this.errorText = error.message;
+        console.log('baaaaaaaad');
+        console.error('There was an error signing up:', error);
+      })
+      .finally(() => {
+        this.showSpinner = false;
+      });
   }
 }

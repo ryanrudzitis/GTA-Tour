@@ -75,6 +75,17 @@
           formControlName="password"
         />
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Access Code</mat-label>
+        <input
+          matInput
+          #accessCodeInput
+          id="accessCodeInput"
+          type="text"
+          formControlName="accessCode"
+          class="w-full max-w-xs"
+        />
+      </mat-form-field>
       <div class="flex gap-3 items-center">
         <button
           mat-raised-button
@@ -88,6 +99,9 @@
         <mat-spinner *ngIf="showSpinner" diameter="30"></mat-spinner>
       </div>
     </form>
+    <p class="mt-3 text-red-700" *ngIf="isError">
+      {{ this.errorText }}
+    </p>
     <p class="mt-3">
       Already have an account?
       <a routerLink="/sign-in" routerLinkActive="active"
