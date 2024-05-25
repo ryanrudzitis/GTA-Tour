@@ -1,11 +1,6 @@
-<div class="bg-green-600">
+<div class="bg-green-600 h-full">
   <div class="container mx-auto p-6">
-    <h1 class="text-4xl font-bold">Join the GTA Tour!</h1>
-    <p class="py-6 text-xl">
-      To join the tour, simply fill out the form below!
-      <br />
-      Make sure to play some matches and earn points to climb the rankings!
-    </p>
+    <h1 class="text-4xl font-bold mb-4">Join the GTA Tour!</h1>
     <form
       [formGroup]="signInForm"
       (ngSubmit)="onSubmit()"
@@ -86,7 +81,11 @@
           class="w-full max-w-xs"
         />
       </mat-form-field>
+      <p class="pb-4 text-sm">
+        Authentication is managed by Google, ensuring your password remains private and secure.
+      </p>
       <div class="flex gap-3 items-center">
+        
         <button
           mat-raised-button
           type="submit"
