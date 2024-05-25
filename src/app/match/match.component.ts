@@ -36,7 +36,6 @@ export class MatchComponent {
   constructor(private firebaseService: FirebaseService) {}
 
   async ngOnInit(): Promise<void> {
-    console.log('match in component:', this.match);
     await this.initializeMatch();
     this.showSpinner = false;
 

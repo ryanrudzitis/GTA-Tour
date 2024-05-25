@@ -159,7 +159,6 @@ export class FirebaseService {
    * @returns {void}
    */
   async addMatch(matchInfo: any): Promise<void> {
-    console.log('adding match to db');
     console.log(matchInfo);
 
     const formatOptions = {

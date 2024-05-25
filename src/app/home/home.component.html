@@ -1,31 +1,47 @@
-<div class="hero min-h-screen text-white bg-green-600">
+<div class="hero h-screen text-white bg-green-600 block md:grid">
   <div class="hero-content flex-col lg:flex-row">
     <img
       src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Rune_MCM22_%2810%29_%2852036646654%29.jpg/220px-Rune_MCM22_%2810%29_%2852036646654%29.jpg"
-      class="max-w-sm rounded-lg shadow-2xl"
+      class="max-w-sm rounded-lg shadow-2xl hidden md:block"
     />
     <div>
-      <h1 class="text-5xl font-bold">Welcome to the GTA Tour!</h1>
-      <p class="py-6 text-xl">
+      <h1 class="text-4xl md:text-5xl font-bold">Welcome to the GTA Tour!</h1>
+      <p class="py-6 md:text-xl">
         The GTA Tour is an exhilarating tennis circuit that showcases the best
         of competitive tennis talent across the Greater Toronto Area. Anchored
-        by prestigious events like the Bloomfield Open and the Glen Abbey Tennis
-        Championships, this tour offers players of all levels the opportunity to
-        test their skills, compete against top-notch opponents, and immerse
+        by prestigious events like the Bloomfield Open and the Windrush Park
+        Open, this tour offers players of all levels the opportunity to test
+        their skills, compete against top-notch opponents, and immerse
         themselves in the vibrant tennis community of the GTA.
       </p>
-      <div class="flex flex-col gap-2 lg:flex-row">
-        <a routerLink="/sign-up" routerLinkActive="active" *ngIf="!auth.currentUser">
+      <div class="flex gap-2 lg:flex-row">
+        <a
+          routerLink="/sign-up"
+          routerLinkActive="active"
+          *ngIf="!auth.currentUser"
+        >
           <button class="btn btn-primary w-[133px]">Join the Tour</button>
         </a>
-        <a routerLink="/sign-in" routerLinkActive="active" *ngIf="!auth.currentUser">
+        <a
+          routerLink="/sign-in"
+          routerLinkActive="active"
+          *ngIf="!auth.currentUser"
+        >
           <button class="btn btn-primary w-[133px]">Sign In</button>
         </a>
-        <a routerLink="/matches" routerLinkActive="active" *ngIf="auth.currentUser">
+        <a
+          routerLink="/matches"
+          routerLinkActive="active"
+          *ngIf="auth.currentUser"
+        >
           <button class="btn btn-primary w-[133px]">View Matches</button>
         </a>
-        <a routerLink="/scores" routerLinkActive="active" *ngIf="auth.currentUser">
-          <button class="btn btn-primary w-[133px]">View Scores</button>
+        <a
+          routerLink="/rankings"
+          routerLinkActive="active"
+          *ngIf="auth.currentUser"
+        >
+          <button class="btn btn-primary w-[133px]">View Rankings</button>
         </a>
       </div>
     </div>

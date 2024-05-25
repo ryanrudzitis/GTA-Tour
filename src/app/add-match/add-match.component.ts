@@ -69,7 +69,7 @@ export class AddMatchComponent {
   });
 
   constructor(private firebaseService: FirebaseService, private _snackBar: MatSnackBar, private authService: AuthService) {
-    console.log('current user', this.authService.currentUser)
+
   }
 
   async ngOnInit() {
