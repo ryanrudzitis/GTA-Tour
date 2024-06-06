@@ -11,7 +11,7 @@
   </div>
   <div class="flex justify-between">
     <div class="flex gap-1">
-      {{ getFlag(winnerInfo.country) }} <a [routerLink]="['/player', winner]" class="text-blue-600">{{ getAbbreviatedName(winnerName) }}</a>
+      {{ flagService.getFlag(winnerInfo.country) }} <a [routerLink]="['/player', winner]" class="text-blue-600">{{ getAbbreviatedName(winnerName) }}</a>
       <mat-icon class="scale-90 text-green-500">done</mat-icon>
     </div>
     <div class="whitespace-pre">
@@ -20,7 +20,7 @@
   </div>
   <div class="flex justify-between">
     <div>
-      {{ getFlag(loserInfo.country) }} <a [routerLink]="['/player', loser]" class="text-blue-600">{{ getAbbreviatedName(loserName) }}</a>
+      {{ flagService.getFlag(loserInfo.country) }} <a [routerLink]="['/player', loser]" class="text-blue-600">{{ getAbbreviatedName(loserName) }}</a>
     </div>
     <div class="whitespace-pre">
       {{ loserSetScores }}

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
-import { flag, code, name, countries } from 'country-emoji';
+import { FlagService } from '../flag.service';
 
 
 @Component({
@@ -14,7 +14,7 @@ export class RankingsComponent {
   allPlayers: any[] = [];
   displayedColumns: string[] = ['rank', 'name', 'points'];
 
-  constructor(private firebaseService: FirebaseService) { }
+  constructor(private firebaseService: FirebaseService, public flagService: FlagService) { }
 
   async ngOnInit(): Promise<void> {
     this.allPlayers = await this.firebaseService.getAllPlayers();
@@ -22,14 +22,5 @@ export class RankingsComponent {
     this.allPlayers.sort((a, b) => b.points - a.points);
     console.log(this.allPlayers);
     this.showSpinner = false;
-  }
-
-  /**
-   * Get the flag emoji for a country
-   * @param country The country name
-   * @returns The flag emoji for the country
-   */
-  getFlag(country: string): string | undefined {
-    return flag(country);
   }
 }

@@ -12,7 +12,7 @@
       <td mat-cell *matCellDef="let player">
         <a [routerLink]="['/player', player.id]" class="underline">
         {{ player.firstName[0] }}. {{ player.lastName }}
-        </a> {{ getFlag(player.country) }}
+        </a> {{ flagService.getFlag(player.country) }}
       </td>
     </ng-container>
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
 import { ActivatedRoute } from '@angular/router';
+import { FlagService } from '../flag.service';
 
 @Component({
   selector: 'app-player',
@@ -13,7 +14,7 @@ export class PlayerComponent {
   player: any;
   playerMatches: any[] = [];
   showSpinner = true;
-  constructor(private firebaseService: FirebaseService, private route: ActivatedRoute) { }
+  constructor(private firebaseService: FirebaseService, private route: ActivatedRoute, public flagService: FlagService) { }
 
   async ngOnInit(): Promise<void> {
     this.route.params.subscribe(async params => {

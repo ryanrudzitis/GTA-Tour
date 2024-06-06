@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FirebaseService } from '../firebase.service';
-import { flag, code, name, countries } from 'country-emoji';
+import { FlagService } from '../flag.service';
 
 @Component({
   selector: 'app-match',
@@ -33,7 +33,7 @@ export class MatchComponent {
   dateString: string = '';
   showSpinner: boolean = true;
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService, public flagService: FlagService) {}
 
   async ngOnInit(): Promise<void> {
     await this.initializeMatch();
@@ -68,10 +68,6 @@ export class MatchComponent {
 
   async getPlayerName(playerId: string): Promise<string> {
     return await this.firebaseService.getPlayerName(playerId);
-  }
-
-  getFlag(country: string): any {
-    return flag(country);
   }
 
   getWinnerSets(): void {
