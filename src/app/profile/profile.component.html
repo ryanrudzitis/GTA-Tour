@@ -4,20 +4,66 @@
   <div *ngIf="!showSpinner">
     <mat-tab-group>
       <mat-tab label="Info">
-        <div class="mt-2 text-center #info">
-          <p *ngIf="firstName != null" class="text-2xl">
-            {{ firstName }} {{ lastName }} {{ flagService.getFlag(country!) }}
-          </p>
-          <p *ngIf="bio != null">
-            {{ bio }}
-          </p>
-          <p *ngIf="sponsor != null">
-            Sponsor: {{ sponsor }}
-          </p>
+        <div class="mt-2 text-center">
+          <div *ngIf="!showEdit">
+            <p *ngIf="firstName != null" class="text-2xl">
+              {{ firstName }} {{ lastName }} {{ flagService.getFlag(country!) }}
+            </p>
+            <p *ngIf="sponsor != null" class="text-sm">
+              Sponsor: {{ sponsor }}
+            </p>
+            <p *ngIf="bio != null">
+              {{ bio }}
+            </p>
+          </div>
 
-          <button *ngIf="!showEdit" mat-raised-button color="primary" class="mt-2" (click)="showEditForm"><mat-icon>edit</mat-icon>Edit profile</button>
-          <button *ngIf="showEdit" mat-raised-button color="primary" class="mt-2" (click)="closeEditForm"><mat-icon>done</mat-icon>Done</button>
+          <button
+            *ngIf="!showEdit"
+            mat-raised-button
+            color="primary"
+            class="mt-2 scale-85"
+            (click)="showEditForm()"
+          >
+            <mat-icon>edit</mat-icon>Edit profile
+          </button>
+        </div>
+        <div *ngIf="showEdit" #formDiv class="mt-2">
+          <form
+            [formGroup]="profileForm"
+            #formDirective="ngForm"
+            (ngSubmit)="onSubmit()"
+            class="flex flex-col gap-1 w-full items-center"
+          >
+            <mat-form-field class="w-4/5">
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country">
+                <mat-option *ngFor="let country of countries" [value]="country">
+                  {{ country }} {{ flagService.getFlag(country) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field hideRequiredMarker class="w-4/5">
+              <mat-label>Sponsor</mat-label>
+              <input matInput formControlName="sponsor" />
+            </mat-form-field>
 
+            <mat-form-field hideRequiredMarker class="w-11/12">
+              <mat-label>Bio</mat-label>
+              <textarea matInput formControlName="bio" rows="4" class="resize-none"></textarea>
+            </mat-form-field>
+            <mat-spinner *ngIf="showEditSpinner" class="mx-auto mt-2"></mat-spinner>
+            
+            <button
+            *ngIf="showEdit"
+            mat-raised-button
+            color="primary"
+            class="-mt-2 scale-85"
+            type="submit"
+            (click)="closeEditForm()"
+          >
+            <mat-icon>done</mat-icon>Done
+          </button>
+          </form>
         </div>
       </mat-tab>
       <mat-tab label="Matches">
@@ -36,22 +82,5 @@
         </div>
       </mat-tab>
     </mat-tab-group>
-
-    <!-- <p *ngIf="firstName != null" class="text-center text-xl">
-      Welcome, {{ firstName }}!
-    </p>
-    <br /> -->
-    <!-- <p class="text-2xl text-center">My Matches</p> -->
-    <!-- <div
-      *ngIf="!showSpinner && matches.length === 0"
-      class="text-center text-2xl"
-    >
-      <span class="text-xl">No matches</span>
-    </div>
-    <div class="flex flex-col gap-4">
-      <div *ngFor="let match of matches">
-        <app-match [match]="match"></app-match>
-      </div>
-    </div> -->
   </div>
 </div>

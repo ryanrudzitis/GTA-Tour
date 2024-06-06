@@ -9,6 +9,11 @@ module.exports = {
     //     'default': "#22C55E"
     //   }
     // },
+    extend: {
+      scale: {
+        '85': '0.85',
+      }
+    }
   },
   plugins: [require("daisyui")]
 }

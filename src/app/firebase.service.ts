@@ -331,6 +331,11 @@ export class FirebaseService {
     }
   }
 
+  async updateUserInfo(userId: string, info: any): Promise<void> {
+    const userDoc = doc(this.db, 'users', userId);
+    await setDoc(userDoc, info, { merge: true });
+  }
+
   
 
   

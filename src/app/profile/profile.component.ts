@@ -5,6 +5,12 @@ import { FlagService } from '../flag.service';
 import { doc, getDoc, getFirestore } from '@firebase/firestore';
 import { Subscription } from 'rxjs';
 import { getAuth, User } from 'firebase/auth';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
@@ -19,16 +25,25 @@ export class ProfileComponent {
   bio: string | null = null;
   sponsor: string | null = null;
   showEdit = false;
-  @ViewChild('info', { static: false }) infoDiv: any;
+  matches: any[] = [];
+  showSpinner = true;
+  showEditSpinner = false;
+  countries = this.flagService.getCountries();
+  @ViewChild('info', { static: false }) infoDiv: ElementRef | undefined;
+  @ViewChild('formDiv', { static: false }) formDiv: ElementRef | undefined;
+
+  profileForm = new FormGroup({
+    country: new FormControl('', [Validators.required]),
+    bio: new FormControl('Testing', [Validators.required]),
+    sponsor: new FormControl('', [Validators.required]),
+  });
 
   constructor(
     private authService: AuthService,
     private firebaseService: FirebaseService,
-    public flagService: FlagService
+    public flagService: FlagService,
+    private fb: FormBuilder
   ) {}
-
-  matches: any[] = [];
-  showSpinner = true;
 
   async ngOnInit(): Promise<void> {
     const auth = getAuth();
@@ -41,6 +56,11 @@ export class ProfileComponent {
       );
       console.log('these are matches in profile', this.matches);
       this.showSpinner = false;
+      this.profileForm = new FormGroup({
+        country: new FormControl(this.country, [Validators.required]),
+        bio: new FormControl(this.bio),
+        sponsor: new FormControl(this.sponsor),
+      });
     });
   }
 
@@ -60,10 +80,30 @@ export class ProfileComponent {
 
   showEditForm(): void {
     console.log('show edit form here');
-    console.log('show edit form', this.infoDiv);
+    this.showEdit = true;
   }
 
-  closeEditForm(): void {
-    this.showEdit = false;
+  async closeEditForm(): Promise<void> {
+    if (!this.profileForm.valid) {
+      return;
+    }
+    console.log('form', this.profileForm.value);
+    this.showEditSpinner = true;
+    await this.firebaseService
+      .updateUserInfo(
+        this.authService.currentUser?.uid as string,
+        this.profileForm.value
+      )
+      .then(async () => {
+        console.log('user info updated');
+        this.showEdit = false;
+        this.showEditSpinner = false;
+        await this.getUserData();
+      })
+      .catch((error) => {
+        console.log('error updating user info', error);
+      });
   }
+
+  onSubmit(): void {}
 }
