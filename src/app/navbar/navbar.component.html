@@ -69,6 +69,15 @@
               Matches
             </button>
           </li>
+          <li *ngIf="authService.currentUser">
+            <button
+              class="btn btn-primary btn-outline"
+              routerLink="/add-match"
+              routerLinkActive="active"
+            >
+              Add Match
+            </button>
+          </li>
         </ul>
         <div
           *ngIf="authService.currentUser"
@@ -125,6 +134,9 @@
       </li>
       <li (click)="closeSidebar()">
         <a class="" routerLink="/matches"> Matches </a>
+      </li>
+      <li *ngIf="authService.currentUser" (click)="closeSidebar()">
+        <a class="" routerLink="/add-match"> Add Match </a>
       </li>
       <li *ngIf="authService.currentUser" (click)="logout(); closeSidebar()">
         <a class="">Logout</a>
