@@ -49,6 +49,8 @@ export class AuthService {
           losses: 0,
           points: 0,
           role: 'normal',
+          bio: '',
+          sponsor: '',
         })
           .then(() => {
             this.router.navigate(['/profile']);
