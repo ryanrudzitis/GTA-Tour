@@ -9,9 +9,10 @@
             <p *ngIf="firstName != null" class="text-2xl">
               {{ firstName }} {{ lastName }} {{ flagService.getFlag(country!) }}
             </p>
-            <p *ngIf="sponsor != null" class="text-sm">
-              Sponsor: {{ sponsor }}
+            <p *ngIf="sponsor != null && sponsor != ''" class="text-sm">
+              Sponsored by {{ sponsor }}
             </p>
+            
             <p *ngIf="bio != null">
               {{ bio }}
             </p>

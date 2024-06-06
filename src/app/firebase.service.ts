@@ -37,8 +37,14 @@ export class FirebaseService {
   async getUserInfo(userId: string): Promise<any> {
     const userDoc = doc(this.db, 'users', userId);
     const userSnap = await getDoc(userDoc);
+
     if (userSnap.exists()) {
-      return userSnap.data();
+      // add the id to the user data
+      let userData = userSnap.data();
+      console.log("id: " + userSnap.id);
+      console.log(userData);
+      userData['id'] = userSnap.id;
+      return userData;
     } else {
       return null;
     }

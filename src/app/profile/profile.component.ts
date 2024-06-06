@@ -20,6 +20,8 @@ import {
 export class ProfileComponent {
   firstName: string | null = null;
   lastName: string | null = null;
+  userId: string | null = null;
+  playerId: string | null = null;
   email: string | null = null;
   country: string | null = null;
   bio: string | null = null;
@@ -50,6 +52,7 @@ export class ProfileComponent {
 
     auth.onAuthStateChanged(async (user) => {
       this.authService.currentUser = user;
+      this.userId = user?.uid!;
       await this.getUserData();
       this.matches = await this.firebaseService.getMatchesForUser(
         this.authService.currentUser?.uid as string
@@ -75,6 +78,7 @@ export class ProfileComponent {
       this.country = userInfo['country'];
       this.bio = userInfo['bio'];
       this.sponsor = userInfo['sponsor'];
+      this.playerId = userInfo['id'];
     }
   }
 

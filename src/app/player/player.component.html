@@ -6,6 +6,14 @@
       {{ flagService.getFlag(player.country) }}
     </h2>
     <div class="flex flex-col gap-2 w-full text-2xl text-center justify-center">
+      <p *ngIf="player.sponsor != null && player.sponsor != ''" class="text-sm">
+        Sponsored by {{ player.sponsor }}
+      </p>
+      
+      <p *ngIf="player.bio != null">
+        {{ player.bio }}
+      </p>
+      <hr class="border-black">
       <div>{{ player.wins }}-{{ player.losses }}</div>
       <div>{{ player.points }} points</div>
     </div>
