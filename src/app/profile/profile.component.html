@@ -12,10 +12,14 @@
             <p *ngIf="sponsor != null && sponsor != ''" class="text-sm">
               Sponsored by {{ sponsor }}
             </p>
-            
+            <p *ngIf="sponsor != null && sponsor == ''" class="italic underline cursor-pointer text-blue-700" (click)="showEdit = true">
+              Add a sponsor
+            </p>
+
             <p *ngIf="bio != null">
               {{ bio }}
             </p>
+            <p *ngIf="bio != null && bio == ''" class="italic underline cursor-pointer text-blue-700" (click)="showEdit = true">Add a bio</p>
           </div>
 
           <button
@@ -50,20 +54,28 @@
 
             <mat-form-field hideRequiredMarker class="w-11/12">
               <mat-label>Bio</mat-label>
-              <textarea matInput formControlName="bio" rows="4" class="resize-none"></textarea>
+              <textarea
+                matInput
+                formControlName="bio"
+                rows="4"
+                class="resize-none"
+              ></textarea>
             </mat-form-field>
-            <mat-spinner *ngIf="showEditSpinner" class="mx-auto my-2"></mat-spinner>
-            
+            <mat-spinner
+              *ngIf="showEditSpinner"
+              class="mx-auto my-2"
+            ></mat-spinner>
+
             <button
-            *ngIf="showEdit"
-            mat-raised-button
-            color="primary"
-            class="-mt-2 scale-85"
-            type="submit"
-            (click)="closeEditForm()"
-          >
-            <mat-icon>done</mat-icon>Done
-          </button>
+              *ngIf="showEdit"
+              mat-raised-button
+              color="primary"
+              class="-mt-2 scale-85"
+              type="submit"
+              (click)="closeEditForm()"
+            >
+              <mat-icon>done</mat-icon>Done
+            </button>
           </form>
         </div>
       </mat-tab>
