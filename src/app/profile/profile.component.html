@@ -1,17 +1,57 @@
-<div class="container mx-auto p-6 h-screen bg-green-600">
-  <h1 class="text-4xl font-bold text-center">Profile</h1>
-  <mat-spinner *ngIf="showSpinner" class="mx-auto"></mat-spinner>
+<div class="p-4 h-screen bg-green-600">
+  <h2 class="text-3xl font-bold text-center">Profile</h2>
+  <mat-spinner *ngIf="showSpinner" class="mx-auto mt-2"></mat-spinner>
   <div *ngIf="!showSpinner">
-    <p *ngIf="firstName != null" class="text-center">Welcome, {{ firstName }}!</p>
-    <br />
-    <p class="text-3xl text-center">My Matches</p>
-    <div *ngIf="!showSpinner && matches.length === 0" class="text-center text-2xl">
-      <span>No matches found</span>
+    <mat-tab-group>
+      <mat-tab label="Info">
+        <div class="mt-2 text-center #info">
+          <p *ngIf="firstName != null" class="text-2xl">
+            {{ firstName }} {{ lastName }} {{ flagService.getFlag(country!) }}
+          </p>
+          <p *ngIf="bio != null">
+            {{ bio }}
+          </p>
+          <p *ngIf="sponsor != null">
+            Sponsor: {{ sponsor }}
+          </p>
+
+          <button *ngIf="!showEdit" mat-raised-button color="primary" class="mt-2" (click)="showEditForm"><mat-icon>edit</mat-icon>Edit profile</button>
+          <button *ngIf="showEdit" mat-raised-button color="primary" class="mt-2" (click)="closeEditForm"><mat-icon>done</mat-icon>Done</button>
+
+        </div>
+      </mat-tab>
+      <mat-tab label="Matches">
+        <div class="mt-2">
+          <div
+            *ngIf="!showSpinner && matches.length === 0"
+            class="text-center text-2xl"
+          >
+            <span class="text-xl">No matches</span>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div *ngFor="let match of matches">
+              <app-match [match]="match"></app-match>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- <p *ngIf="firstName != null" class="text-center text-xl">
+      Welcome, {{ firstName }}!
+    </p>
+    <br /> -->
+    <!-- <p class="text-2xl text-center">My Matches</p> -->
+    <!-- <div
+      *ngIf="!showSpinner && matches.length === 0"
+      class="text-center text-2xl"
+    >
+      <span class="text-xl">No matches</span>
     </div>
     <div class="flex flex-col gap-4">
       <div *ngFor="let match of matches">
         <app-match [match]="match"></app-match>
       </div>
-    </div>
+    </div> -->
   </div>
 </div>

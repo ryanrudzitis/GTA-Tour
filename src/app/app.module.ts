@@ -35,6 +35,7 @@ import { initializeApp as initializeApp_alias, provideFirebaseApp } from '@angul
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import {MatTabsModule} from '@angular/material/tabs';
 
 const app = initializeApp(firebaseConfig);
 
@@ -72,7 +73,8 @@ const app = initializeApp(firebaseConfig);
     MatNativeDateModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatTabsModule
   ],
   providers: [
     provideFirebaseApp(() => initializeApp({"projectId":"gta-tour-rankings","appId":"1:429267161229:web:90db2dc2eef32d13a812c4","storageBucket":"gta-tour-rankings.appspot.com","apiKey":"AIzaSyCfHY_G8gTiGn6GdrlOG8K_kLbUncXSdCM","authDomain":"gta-tour-rankings.firebaseapp.com","messagingSenderId":"429267161229"})),
