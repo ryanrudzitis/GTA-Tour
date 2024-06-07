@@ -22,6 +22,7 @@ export class ProfileComponent {
   lastName: string | null = null;
   userId: string | null = null;
   playerId: string | null = null;
+  profilePic: string | null = null;
   email: string | null = null;
   country: string | null = null;
   bio: string | null = null;
@@ -44,7 +45,6 @@ export class ProfileComponent {
     private authService: AuthService,
     private firebaseService: FirebaseService,
     public flagService: FlagService,
-    private fb: FormBuilder
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -54,10 +54,10 @@ export class ProfileComponent {
       this.authService.currentUser = user;
       this.userId = user?.uid!;
       await this.getUserData();
+      console.log("Profile pic", this.profilePic);
       this.matches = await this.firebaseService.getMatchesForUser(
         this.authService.currentUser?.uid as string
       );
-      console.log('these are matches in profile', this.matches);
       this.showSpinner = false;
       this.profileForm = new FormGroup({
         country: new FormControl(this.country, [Validators.required]),
@@ -79,6 +79,7 @@ export class ProfileComponent {
       this.bio = userInfo['bio'];
       this.sponsor = userInfo['sponsor'];
       this.playerId = userInfo['id'];
+      this.profilePic = userInfo['profilePic'];
     }
   }
 
@@ -107,6 +108,10 @@ export class ProfileComponent {
       .catch((error) => {
         console.log('error updating user info', error);
       });
+  }
+
+  async changeProfilePic(): Promise<void> {
+    console.log('change profile pic');
   }
 
   onSubmit(): void {}
