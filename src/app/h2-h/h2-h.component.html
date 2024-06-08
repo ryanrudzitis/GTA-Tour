@@ -56,5 +56,24 @@
       </div>
     </div>
   </div>
+  <mat-tab-group *ngIf="!showSpinner">
+    <mat-tab label="Bio">
+      <div class="flex flex-col mt-1 px-2">
+        <div class="flex justify-between">
+          <div>
+            {{ this.player1Rank }}
+          </div>
+          <div class="text-xs font-semibold">Rank</div>
+          <div>
+            {{ this.player2Rank }}
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Matches">
+      <div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
   }
 </div>

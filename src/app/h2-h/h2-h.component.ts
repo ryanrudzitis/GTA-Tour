@@ -15,12 +15,14 @@ export class H2HComponent {
   player2: any;
   player1Wins: number = 0;
   player2Wins: number = 0;
+  player1Rank: number = 0;
+  player2Rank: number = 0;
   showSpinner = true;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firebaseService: FirebaseService,
+    public firebaseService: FirebaseService,
     public flagService: FlagService
   ) {}
 
@@ -33,14 +35,13 @@ export class H2HComponent {
     if (this.id1 && this.id2) {
       // a proper head to head
       this.showSpinner = true;
-      console.log('H2H between', this.id1, 'and', this.id2);
       this.player1 = await this.firebaseService.getUserInfo(this.id1);
       this.player2 = await this.firebaseService.getUserInfo(this.id2);
-      console.log('Player 1:', this.player1);
-      console.log('Player 2:', this.player2);
       const wins = await this.firebaseService.getH2HWins(this.id1, this.id2);
       this.player1Wins = wins[0];
       this.player2Wins = wins[1];
+      this.player1Rank = await this.firebaseService.getRank(this.id1);
+      this.player2Rank = await this.firebaseService.getRank(this.id2);
       this.showSpinner = false;
     } else if (this.id1) {
       // a head to head with a single player

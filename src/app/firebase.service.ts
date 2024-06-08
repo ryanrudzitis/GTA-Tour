@@ -443,4 +443,16 @@ export class FirebaseService {
 
     return [player1Wins, player2Wins];
   }
+
+  async getRank(userId: string): Promise<number> {
+    const usersCollection = collection(this.db, 'users');
+    const usersSnapshot = await getDocs(usersCollection);
+    const users = usersSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    users.sort((a: any, b: any) => b['points'] - a['points']);
+    return users.findIndex((user) => user.id === userId) + 1;
+  }
 }
+
