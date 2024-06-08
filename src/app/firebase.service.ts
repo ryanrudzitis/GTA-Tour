@@ -411,4 +411,17 @@ export class FirebaseService {
     const userDoc = doc(this.db, 'users', userId);
     await setDoc(userDoc, { profilePic: picUrl }, { merge: true });
   }
+
+  async getProfilePic(userId: string): Promise<string> {
+    console.log('getting profile pic');
+    // console.log('userId', userId);
+    const userDoc = doc(this.db, 'users', userId);
+    const userSnap = await getDoc(userDoc);
+    const userData = userSnap.data();
+    if (userData) {
+      return userData['profilePic'];
+    } else {
+      return '';
+    }
+  }
 }

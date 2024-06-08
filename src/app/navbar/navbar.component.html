@@ -24,6 +24,7 @@
           </svg>
         </label>
       </div>
+
       <div class="flex-1">
         <a class="btn btn-ghost text-xl p-1" routerLink="/">
           <img src="../../assets/tennis_ball.png" class="h-8" />
@@ -31,6 +32,40 @@
           GTA Tour</a
         >
       </div>
+      <!-- <app-profile-pic
+          [pic]="profilePic"
+          [size]="'w-9'"
+          [textSize]="'text-sm'"
+          [firstName]="firstName"
+          [lastName]="lastName"
+        ></app-profile-pic> -->
+        <div
+          *ngIf="authService.currentUser"
+          class="dropdown dropdown-end p-0.5 lg:hidden"
+        >
+          <div
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost btn-circle avatar"
+          >
+            <app-profile-pic
+              [pic]="profilePic"
+              [size]="'w-9'"
+              [textSize]="'text-sm'"
+              [firstName]="firstName"
+              [lastName]="lastName"
+            ></app-profile-pic>
+          </div>
+          <ul
+            tabindex="0"
+            class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a class="justify-between" routerLink="/profile"> Profile </a>
+            </li>
+            <li><a routerLink="" (click)="logout()">Logout</a></li>
+          </ul>
+        </div>
       <div class="flex-none hidden lg:flex">
         <ul class="menu menu-horizontal gap-2 items-center">
           <li *ngIf="!authService.currentUser">
@@ -88,12 +123,13 @@
             role="button"
             class="btn btn-ghost btn-circle avatar"
           >
-            <div class="w-9 rounded-full no-animation">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              />
-            </div>
+            <app-profile-pic
+              [pic]="profilePic"
+              [size]="'w-9'"
+              [textSize]="'text-sm'"
+              [firstName]="firstName"
+              [lastName]="lastName"
+            ></app-profile-pic>
           </div>
           <ul
             tabindex="0"
