@@ -15,6 +15,8 @@ export class PlayerComponent {
   player: any;
   playerMatches: any[] = [];
   showSpinner = true;
+  rank: number = 0;
+  titles: number = 0;
   constructor(
     private firebaseService: FirebaseService,
     private route: ActivatedRoute,
@@ -30,6 +32,8 @@ export class PlayerComponent {
       this.playerMatches = await this.firebaseService.getMatchesForUser(
         this.playerId
       );
+      this.rank = await this.firebaseService.getRank(this.playerId);
+      this.titles = await this.firebaseService.getNumTitles(this.playerId);
       this.showSpinner = false;
     });
   }

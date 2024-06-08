@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
-import { collection, getDocs, query, where, or } from 'firebase/firestore';
+import { collection, getDocs, query, where, or, and } from 'firebase/firestore';
 import {
   getStorage,
   ref,
@@ -454,5 +454,14 @@ export class FirebaseService {
     users.sort((a: any, b: any) => b['points'] - a['points']);
     return users.findIndex((user) => user.id === userId) + 1;
   }
-}
 
+  async getNumTitles(userId: string): Promise<number> {
+    const matchesCollection = collection(this.db, 'matches');
+    const winsQuery = query(
+      matchesCollection,
+      and(where('winner', '==', userId), where('round.value', '==', 'f'))
+    );
+    const winsSnapshot = await getDocs(winsQuery);
+    return winsSnapshot.size;
+  }
+}

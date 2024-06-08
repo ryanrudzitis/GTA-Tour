@@ -17,6 +17,8 @@ export class H2HComponent {
   player2Wins: number = 0;
   player1Rank: number = 0;
   player2Rank: number = 0;
+  player1Titles: number = 0;
+  player2Titles: number = 0;
   showSpinner = true;
 
   constructor(
@@ -42,6 +44,8 @@ export class H2HComponent {
       this.player2Wins = wins[1];
       this.player1Rank = await this.firebaseService.getRank(this.id1);
       this.player2Rank = await this.firebaseService.getRank(this.id2);
+      this.player1Titles = await this.firebaseService.getNumTitles(this.id1);
+      this.player2Titles = await this.firebaseService.getNumTitles(this.id2);
       this.showSpinner = false;
     } else if (this.id1) {
       // a head to head with a single player

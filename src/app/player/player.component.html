@@ -17,6 +17,14 @@
       </h2>
     </div>
     <div class="flex flex-col gap-2 w-full text-2xl text-center justify-center">
+      <p *ngIf="this.rank != null" class="">
+        Rank: {{ this.rank }}
+      </p>
+
+      <p *ngIf="this.titles != null" class="">
+        Titles: {{ this.titles }}
+      </p>
+
       <p *ngIf="player.sponsor != null && player.sponsor != ''" class="text-sm">
         Sponsored by {{ player.sponsor }}
       </p>
