@@ -1,8 +1,9 @@
 <div class="p-4 bg-green-600 min-h-screen h-full">
   <h2 class="text-3xl font-bold mb-4 text-center">Sobeys™ Head2Head</h2>
+  <mat-spinner *ngIf="showSpinner" class="mx-auto" />
   @if (this.id1 && this.id2) {
-  <div class="flex mt-2 justify-between">
-    <div class="flex flex-col gap-1 items-center">
+  <div class="flex mt-2 justify-between" *ngIf="!showSpinner">
+    <div class="flex flex-col items-center">
       <app-profile-pic
         [pic]="player1.profilePic"
         [firstName]="player1.firstName"
@@ -11,9 +12,12 @@
         class="mx-auto"
         size="w-12"
       ></app-profile-pic>
-      <span class="font-bold text-center"
-        >{{ player1.firstName }} {{ player1.lastName }}</span
+      <a
+        [routerLink]="['/player', player1.id]"
+        class="font-bold text-center text-blue-700"
+        >{{ player1.firstName }} {{ player1.lastName }}</a
       >
+      
       <div class="flex gap-1 text-2xl w-fit">
         <span class="text-center text-3xl">{{
           this.flagService.getFlag(this.player1.country)
@@ -27,7 +31,7 @@
       {{ this.player1Wins }}-{{ this.player2Wins }}
     </div>
     <div>
-      <div class="flex flex-col gap-1 items-center">
+      <div class="flex flex-col items-center">
         <app-profile-pic
           [pic]="player2.profilePic"
           [firstName]="player2.firstName"
@@ -36,8 +40,10 @@
           class="mx-auto"
           size="w-12"
         ></app-profile-pic>
-        <span class="font-bold text-center"
-          >{{ player2.firstName }} {{ player2.lastName }}</span
+        <a
+          [routerLink]="['/player', player2.id]"
+          class="font-bold text-center text-blue-700"
+          >{{ player2.firstName }} {{ player2.lastName }}</a
         >
         <div class="flex gap-1 text-2xl w-fit">
           <span class="text-center font-bold">{{
