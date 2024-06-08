@@ -5,7 +5,15 @@
     <mat-tab-group>
       <mat-tab label="Info">
         <div class="flex flex-col">
-          <app-profile-pic class="mx-auto" [pic]="this.profilePic" [firstName]="this.firstName" [lastName]="this.lastName"> </app-profile-pic>
+          <app-profile-pic
+            class="mx-auto mt-2"
+            size="w-24"
+            textSize="text-3xl"
+            [pic]="this.profilePic"
+            [firstName]="this.firstName"
+            [lastName]="this.lastName"
+          >
+          </app-profile-pic>
 
           <div *ngIf="showEdit" class="">
             <div
@@ -22,7 +30,7 @@
               ><mat-spinner [diameter]="30"></mat-spinner>
             </div>
           </div>
-          <div class="mt-2 text-center">
+          <div class="mt-1 text-center">
             <div *ngIf="!showEdit">
               <p *ngIf="firstName != null" class="text-2xl">
                 {{ firstName }} {{ lastName }}

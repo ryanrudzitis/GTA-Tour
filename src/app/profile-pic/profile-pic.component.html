@@ -1,20 +1,12 @@
-<div
-  *ngIf="this.pic === undefined"
-  class="avatar placeholder mx-auto mt-2"
->
-  <div class="bg-neutral text-neutral-content rounded-full w-24">
-    <span class="text-3xl"
+<div *ngIf="this.pic === undefined" class="avatar placeholder">
+  <div [class]="'bg-neutral text-neutral-content rounded-full ' + this.size">
+    <span [class]="this.textSize"
       >{{ this.firstName?.charAt(0) }}{{ this.lastName?.charAt(0) }}
     </span>
   </div>
 </div>
-<div
-  *ngIf="this.pic != undefined"
-  class="avatar placeholder mx-auto mt-2"
->
-  <div class="avatar">
-    <div class="w-24 rounded-full">
+<div *ngIf="this.pic != undefined" class="avatar block">
+    <div [class]="'rounded-full ' + this.size">
       <img [src]="this.pic" />
     </div>
-  </div>
 </div>

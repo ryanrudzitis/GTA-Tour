@@ -1,19 +1,30 @@
 <div class="p-4 h-full bg-green-600">
   <mat-spinner *ngIf="showSpinner" class="mx-auto" />
   <div *ngIf="!showSpinner">
-    <h2 class="text-3xl font-bold mb-2 text-center">
-      {{ player.firstName }} {{ player.lastName }}
-      {{ flagService.getFlag(player.country) }}
-    </h2>
+    <div class="flex flex-col">
+      <app-profile-pic
+        class="mx-auto"
+        size="w-24"
+        textSize="text-3xl"
+        [pic]="player.profilePic"
+        [firstName]="player.firstName"
+        [lastName]="player.lastName"
+      />
+
+      <h2 class="text-3xl font-bold mb-2 text-center">
+        {{ player.firstName }} {{ player.lastName }}
+        {{ flagService.getFlag(player.country) }}
+      </h2>
+    </div>
     <div class="flex flex-col gap-2 w-full text-2xl text-center justify-center">
       <p *ngIf="player.sponsor != null && player.sponsor != ''" class="text-sm">
         Sponsored by {{ player.sponsor }}
       </p>
-      
+
       <p *ngIf="player.bio != null">
         {{ player.bio }}
       </p>
-      <hr class="border-black">
+      <hr class="border-black" />
       <div>{{ player.wins }}-{{ player.losses }}</div>
       <div>{{ player.points }} points</div>
     </div>
