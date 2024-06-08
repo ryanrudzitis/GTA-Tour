@@ -27,6 +27,14 @@
       <hr class="border-black" />
       <div>{{ player.wins }}-{{ player.losses }}</div>
       <div>{{ player.points }} points</div>
+      <!-- head to head button -->
+      <button
+        mat-flat-button
+        class="mx-auto"
+        (click)="this.directH2H()"
+      >
+        HEAD2HEAD
+      </button>
     </div>
     <div>
       <h2 class="text-xl font-bold my-4 text-center">Matches</h2>
