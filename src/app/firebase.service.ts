@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { doc, getDoc, getFirestore, setDoc } from '@firebase/firestore';
 import { collection, getDocs, query, where, or } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from 'firebase/storage';
 import { PointsService } from './points.service';
 
 interface Tournament {
@@ -14,9 +20,9 @@ interface Tournament {
 })
 export class FirebaseService {
   private db = getFirestore();
+  private storage = getStorage();
 
-  constructor(private pointsService: PointsService) {
-  }
+  constructor(private pointsService: PointsService) {}
 
   async getUserName(userId: string): Promise<string> {
     const userDoc = doc(this.db, 'users', userId);
@@ -41,7 +47,7 @@ export class FirebaseService {
     if (userSnap.exists()) {
       // add the id to the user data
       let userData = userSnap.data();
-      console.log("id: " + userSnap.id);
+      console.log('id: ' + userSnap.id);
       console.log(userData);
       userData['id'] = userSnap.id;
       return userData;
@@ -52,7 +58,10 @@ export class FirebaseService {
 
   async getMatchesForUser(userId: string): Promise<any> {
     const matchesCollection = collection(this.db, 'matches');
-    const matchesQuery = query(matchesCollection, or(where('winner', '==', userId), where('loser', '==', userId)));
+    const matchesQuery = query(
+      matchesCollection,
+      or(where('winner', '==', userId), where('loser', '==', userId))
+    );
     const matchesSnapshot = await getDocs(matchesQuery);
     const matches = matchesSnapshot.docs.map((doc) => doc.data());
     //sort matches by date lexographically, with most recent first
@@ -64,7 +73,7 @@ export class FirebaseService {
    * Get all matches in a tournament
    * @param {string} tournamentId - The id of the tournament
    * @returns {Promise<any>} - Array of matches in the tournament
-   * 
+   *
    */
   //TODO - can this be deleted?
   async getMatchesInTournament(tournamentId: string): Promise<any> {
@@ -182,7 +191,7 @@ export class FirebaseService {
 
     const isoString = this.toIsoString(matchInfo.date);
     const matchesCollection = collection(this.db, 'matches');
-    
+
     let round;
     if (matchInfo.round === undefined) {
       // league matches don't have rounds
@@ -279,7 +288,7 @@ export class FirebaseService {
    * @param {string} tournamentLevel - The level of the tournament
    * @param {string} matchLevel - The level of the match
    * @returns {void}
-   * 
+   *
    */
   async incrementPoints(
     winnerId: string,
@@ -288,7 +297,8 @@ export class FirebaseService {
     matchLevel: string
   ): Promise<void> {
     const points = this.pointsService.getPoints(tournamentLevel, matchLevel);
-    if (tournamentLevel === 'lm') { // league match
+    if (tournamentLevel === 'lm') {
+      // league match
       await this.leagueMatchPoints(winnerId, loserId, points);
       return;
     } else {
@@ -297,7 +307,7 @@ export class FirebaseService {
       }
 
       if (matchLevel === 'f') {
-        console.log("need to add winner points for winning the final");
+        console.log('need to add winner points for winning the final');
         const winnerPoints = this.pointsService.getPoints(tournamentLevel, 'w');
         await this.updateUserPoints(winnerId, winnerPoints);
       }
@@ -310,9 +320,13 @@ export class FirebaseService {
    * @param {string} loserId - The id of the loser
    * @param {number} winnerPoints - The number of points the winner gets
    * @returns {void}
-   * 
+   *
    */
-  async leagueMatchPoints(winnerId: string, loserId: string, winnerPoints: number): Promise<void> {
+  async leagueMatchPoints(
+    winnerId: string,
+    loserId: string,
+    winnerPoints: number
+  ): Promise<void> {
     const loserPoints = -10;
     this.updateUserPoints(winnerId, winnerPoints);
     this.updateUserPoints(loserId, loserPoints);
@@ -323,9 +337,12 @@ export class FirebaseService {
    * @param {string} userId - The id of the user
    * @param {number} pointsToAdd - The number of points to add
    * @returns {void}
-   * 
+   *
    */
-  private async updateUserPoints(userId: string, pointsToAdd: number): Promise<void> {
+  private async updateUserPoints(
+    userId: string,
+    pointsToAdd: number
+  ): Promise<void> {
     const userDoc = doc(this.db, 'users', userId);
     const userSnap = await getDoc(userDoc);
     const userData = userSnap.data();
@@ -342,7 +359,56 @@ export class FirebaseService {
     await setDoc(userDoc, info, { merge: true });
   }
 
-  
+  async uploadProfilePic(userId: string, file: any): Promise<void> {
+    console.log('uploading profile pic');
+    const newFileName =
+      userId + file.name.substring(file.name.lastIndexOf('.'));
+    console.log('newFileName', newFileName);
+    const storageRef = ref(this.storage, `profilePics/${newFileName}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-  
+    return new Promise<void>((resolve, reject) => {
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          console.log(
+            'Upload is ' +
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100 +
+              '% done'
+          );
+        },
+        (error) => {
+          // A full list of error codes is available at
+          // https://firebase.google.com/docs/storage/web/handle-errors
+          switch (error.code) {
+            case 'storage/unauthorized':
+              // User doesn't have permission to access the object
+              break;
+            case 'storage/canceled':
+              // User canceled the upload
+              break;
+
+            // ...
+
+            case 'storage/unknown':
+              // Unknown error occurred, inspect error.serverResponse
+              break;
+          }
+          reject();
+        },
+        async () => {
+          // Upload completed successfully, now we can get the download URL
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log('File available at', downloadURL);
+          await this.setProfilePic(userId, downloadURL);
+          resolve();
+        }
+      );
+    });
+  }
+
+  async setProfilePic(userId: string, picUrl: string): Promise<void> {
+    const userDoc = doc(this.db, 'users', userId);
+    await setDoc(userDoc, { profilePic: picUrl }, { merge: true });
+  }
 }

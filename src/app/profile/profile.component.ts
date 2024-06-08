@@ -31,6 +31,7 @@ export class ProfileComponent {
   matches: any[] = [];
   showSpinner = true;
   showEditSpinner = false;
+  showImageSpinner = false;
   countries = this.flagService.getCountries();
   @ViewChild('info', { static: false }) infoDiv: ElementRef | undefined;
   @ViewChild('formDiv', { static: false }) formDiv: ElementRef | undefined;
@@ -44,7 +45,7 @@ export class ProfileComponent {
   constructor(
     private authService: AuthService,
     private firebaseService: FirebaseService,
-    public flagService: FlagService,
+    public flagService: FlagService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -54,7 +55,7 @@ export class ProfileComponent {
       this.authService.currentUser = user;
       this.userId = user?.uid!;
       await this.getUserData();
-      console.log("Profile pic", this.profilePic);
+      console.log('Profile pic', this.profilePic);
       this.matches = await this.firebaseService.getMatchesForUser(
         this.authService.currentUser?.uid as string
       );
@@ -111,7 +112,23 @@ export class ProfileComponent {
   }
 
   async changeProfilePic(): Promise<void> {
-    console.log('change profile pic');
+    const userId = this.authService.currentUser?.uid as string;
+    //open the file picker
+    let input = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = async (e: any) => {
+      var file = e.target.files[0];
+      
+      this.showImageSpinner = true
+      await this.firebaseService.uploadProfilePic(userId, file);
+      console.log('profile pic uploaded');
+      await this.getUserData();
+      this.showEdit = false;
+      this.showImageSpinner = false;
+    };
+
+    input.click();
   }
 
   onSubmit(): void {}
