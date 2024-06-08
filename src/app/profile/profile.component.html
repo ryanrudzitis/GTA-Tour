@@ -5,26 +5,7 @@
     <mat-tab-group>
       <mat-tab label="Info">
         <div class="flex flex-col">
-          <div
-            *ngIf="this.profilePic === undefined"
-            class="avatar placeholder mx-auto mt-2"
-          >
-            <div class="bg-neutral text-neutral-content rounded-full w-24">
-              <span class="text-3xl"
-                >{{ this.firstName?.charAt(0) }}{{ this.lastName?.charAt(0) }}
-              </span>
-            </div>
-          </div>
-          <div
-            *ngIf="this.profilePic != undefined"
-            class="avatar placeholder mx-auto mt-2"
-          >
-            <div class="avatar">
-              <div class="w-24 rounded-full">
-                <img [src]="this.profilePic" />
-              </div>
-            </div>
-          </div>
+          <app-profile-pic class="mx-auto" [pic]="this.profilePic" [firstName]="this.firstName" [lastName]="this.lastName"> </app-profile-pic>
 
           <div *ngIf="showEdit" class="">
             <div
@@ -33,11 +14,12 @@
             >
               Change profile picture
             </div>
-            <div *ngIf="this.showImageSpinner" class="flex flex-col items-center">
+            <div
+              *ngIf="this.showImageSpinner"
+              class="flex flex-col items-center"
+            >
               <span>Saving picture...</span
-              ><mat-spinner
-                [diameter]="30"
-              ></mat-spinner>
+              ><mat-spinner [diameter]="30"></mat-spinner>
             </div>
           </div>
           <div class="mt-2 text-center">

@@ -16,6 +16,7 @@ import { firebaseConfig } from '../../firebase';
 import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 import { MatchComponent } from './match/match.component';
+import { ProfilePicComponent } from './profile-pic/profile-pic.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './shared/modules/material/material.module';
 import { AddMatchComponent } from './add-match/add-match.component';
@@ -53,6 +54,7 @@ const app = initializeApp(firebaseConfig);
     MatchComponent,
     AddMatchComponent,
     PlayerComponent,
+    ProfilePicComponent,
     FilterPipe
   ],
   imports: [
