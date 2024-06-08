@@ -2,33 +2,51 @@
   <h2 class="text-3xl font-bold mb-4 text-center">Head 2 Head</h2>
   @if (this.id1 && this.id2) {
   <div class="flex mt-2 justify-between">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-1 items-center">
       <app-profile-pic
         [pic]="player1.profilePic"
         [firstName]="player1.firstName"
         [lastName]="player1.lastName"
         textSize="text-sm"
         class="mx-auto"
-        size="w-24"
+        size="w-12"
       ></app-profile-pic>
-      <span class="text-xl font-bold text-center"
+      <span class="font-bold text-center"
         >{{ player1.firstName }} {{ player1.lastName }}</span
       >
+      <div class="flex gap-1 text-2xl w-fit">
+        <span class="text-center text-3xl">{{
+          this.flagService.getFlag(this.player1.country)
+        }}</span>
+        <span class="text-center font-bold">{{
+          this.flagService.getCode(this.player1.country)
+        }}</span>
+      </div>
     </div>
-
+    <div class="text-4xl font-semibold h-fit self-center">
+      {{ this.player1Wins }} - {{ this.player2Wins }}
+    </div>
     <div>
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-1 items-center">
         <app-profile-pic
           [pic]="player2.profilePic"
           [firstName]="player2.firstName"
           [lastName]="player2.lastName"
           textSize="text-sm"
           class="mx-auto"
-          size="w-24"
+          size="w-12"
         ></app-profile-pic>
-        <span class="text-xl font-bold text-center"
+        <span class="font-bold text-center"
           >{{ player2.firstName }} {{ player2.lastName }}</span
         >
+        <div class="flex gap-1 text-2xl w-fit">
+          <span class="text-center font-bold">{{
+            this.flagService.getCode(this.player2.country)
+          }}</span>
+          <span class="text-center text-3xl">{{
+            this.flagService.getFlag(this.player2.country)
+          }}</span>
+        </div>
       </div>
     </div>
   </div>

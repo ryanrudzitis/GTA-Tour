@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FirebaseService } from '../firebase.service';
+import { FlagService } from '../flag.service';
 
 @Component({
   selector: 'app-h2-h',
@@ -12,11 +13,14 @@ export class H2HComponent {
   id2: string = '';
   player1: any;
   player2: any;
+  player1Wins: number = 0;
+  player2Wins: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    public flagService: FlagService
   ) {}
 
   async ngOnInit() {
@@ -32,6 +36,9 @@ export class H2HComponent {
       this.player2 = await this.firebaseService.getUserInfo(this.id2);
       console.log('Player 1:', this.player1);
       console.log('Player 2:', this.player2);
+      const wins = await this.firebaseService.getH2HWins(this.id1, this.id2);
+      this.player1Wins = wins[0];
+      this.player2Wins = wins[1];
     } else if (this.id1) {
       // a head to head with a single player
       console.log('H2H with', this.id1);

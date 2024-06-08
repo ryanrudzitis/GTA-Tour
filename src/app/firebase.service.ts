@@ -422,4 +422,25 @@ export class FirebaseService {
       return '';
     }
   }
+
+  async getH2HWins(player1Id: string, player2Id: string): Promise<number[]> {
+    const matchesCollection = collection(this.db, 'matches');
+    let player1WinsQuery = query(
+      matchesCollection,
+      where('winner', '==', player1Id),
+      where('loser', '==', player2Id)
+    );
+    const player1WinsSnapshot = await getDocs(player1WinsQuery);
+    const player1Wins = player1WinsSnapshot.size;
+
+    let player2WinsQuery = query(
+      matchesCollection,
+      where('winner', '==', player2Id),
+      where('loser', '==', player1Id)
+    );
+    const player2WinsSnapshot = await getDocs(player2WinsQuery);
+    const player2Wins = player2WinsSnapshot.size;
+
+    return [player1Wins, player2Wins];
+  }
 }

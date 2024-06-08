@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { flag, countries } from 'country-emoji';
+import { flag, code, countries } from 'country-emoji';
 
 
 @Injectable({
@@ -18,5 +18,9 @@ export class FlagService {
     .map(([name]) => name)
     .sort();
   }
+
+  getCode(country: string): any {
+    return code(country)
+  } 
 
 }
