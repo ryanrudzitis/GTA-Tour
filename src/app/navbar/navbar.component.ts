@@ -28,8 +28,6 @@ export class NavbarComponent {
       this.firstName = userInfo.firstName;
       this.lastName = userInfo.lastName;
       this.profilePic = userInfo.profilePic;
-      console.log('user id', userId);
-      // this.profilePic = await this.firebaseService.getProfilePic(userId);
     });
   }
 

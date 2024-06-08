@@ -22,7 +22,6 @@ export class AuthService {
   constructor(private router: Router) {
     const auth = getAuth();
     auth.onAuthStateChanged((user) => {
-      console.log('User state changed:', user);
       this.currentUser = user;
     });
   }

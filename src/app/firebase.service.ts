@@ -47,8 +47,6 @@ export class FirebaseService {
     if (userSnap.exists()) {
       // add the id to the user data
       let userData = userSnap.data();
-      console.log('id: ' + userSnap.id);
-      console.log(userData);
       userData['id'] = userSnap.id;
       return userData;
     } else {

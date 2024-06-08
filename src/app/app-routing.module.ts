@@ -9,6 +9,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { RankingsComponent } from './rankings/rankings.component';
 import { AddMatchComponent } from './add-match/add-match.component';
 import { PlayerComponent } from './player/player.component';
+import { H2HComponent } from './h2-h/h2-h.component';
 import { authGuard } from './auth.guard';
 import { noUserGuard } from './no-user.guard';
 
@@ -21,6 +22,9 @@ const routes: Routes = [
   { path: 'rankings', component: RankingsComponent},
   { path: 'add-match', component: AddMatchComponent, canActivate: [noUserGuard] },
   { path: 'player/:id', component: PlayerComponent},
+  { path: 'h2h', component: H2HComponent},
+  { path: 'h2h/:id1', component: H2HComponent},
+  { path: 'h2h/:id1/:id2', component: H2HComponent},
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 ];
 
