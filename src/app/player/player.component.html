@@ -32,7 +32,7 @@
       <p *ngIf="player.bio != null">
         {{ player.bio }}
       </p>
-      <hr class="border-black" />
+      <!-- <hr class="border-black" /> -->
       <div>{{ player.wins }}-{{ player.losses }}</div>
       <div>{{ player.points }} points</div>
       <!-- head to head button -->
@@ -45,7 +45,7 @@
       </button>
     </div>
     <div>
-      <h2 class="text-xl font-bold my-4 text-center">Matches</h2>
+      <h2 class="text-4xl font-bold my-4 text-center">Matches</h2>
       <div
         *ngIf="!showSpinner && playerMatches.length === 0"
         class="text-center text-2xl"

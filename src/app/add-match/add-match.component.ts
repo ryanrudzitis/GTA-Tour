@@ -73,7 +73,10 @@ export class AddMatchComponent {
   }
 
   async ngOnInit() {
-    const allPlayers = await this.firebaseService.getAllPlayers();
+    let allPlayers = await this.firebaseService.getAllPlayers();
+    allPlayers.sort((a: any, b: any) => {
+      return a.lastName.localeCompare(b.lastName);
+    });
     this.allTournaments = await this.firebaseService.getAllTournaments();
     this.buildPlayerDropdown(allPlayers);
     this.showSpinner = false;
