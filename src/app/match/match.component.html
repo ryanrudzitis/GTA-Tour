@@ -3,27 +3,36 @@
   class="w-[340px] h-[114px] border border-slate-300 rounded-md p-2 overflow-hidden bg-slate-100 max-w-md"
 >
   <div *ngIf="showTournament" class="font-semibold">
-    {{ tournamentName }} · {{ round.name }}
+    {{ tournamentName }}
+    @if (tournamentName !== round.name) { · {{ round.name }}}
   </div>
   <div>
-    {{ status }} ·
+    {{ status }}
+
+    ·
     {{ dateString }}
   </div>
   <div class="flex justify-between">
     <div class="flex gap-1">
-      {{ flagService.getFlag(winnerInfo.country) }} <a [routerLink]="['/player', winner]" class="text-blue-600">{{ getAbbreviatedName(winnerName) }}</a>
+      {{ flagService.getFlag(winnerInfo.country) }}
+      <a [routerLink]="['/player', winner]" class="text-blue-600">{{
+        getAbbreviatedName(winnerName)
+      }}</a>
       <mat-icon class="scale-90 text-green-500">done</mat-icon>
     </div>
     <div class="whitespace-pre">
-      {{ winnerSetScores }}
+      <span class="text-center mono-light">{{ winnerSetScores }}</span>
     </div>
   </div>
   <div class="flex justify-between">
     <div>
-      {{ flagService.getFlag(loserInfo.country) }} <a [routerLink]="['/player', loser]" class="text-blue-600">{{ getAbbreviatedName(loserName) }}</a>
+      {{ flagService.getFlag(loserInfo.country) }}
+      <a [routerLink]="['/player', loser]" class="text-blue-600">{{
+        getAbbreviatedName(loserName)
+      }}</a>
     </div>
-    <div class="whitespace-pre">
-      {{ loserSetScores }}
+    <div class="whitespace-pre text-center">
+      <span class="text-center mono-light">{{ loserSetScores }}</span>
     </div>
   </div>
 </div>
