@@ -9,7 +9,7 @@
   <div *ngIf="!showSpinner && matches.length === 0" class="text-center text-2xl">
     <span>No matches found</span>
   </div>
-  <div *ngIf="!showSpinner" class="flex flex-col md:flex-row gap-4 mt-1">
+  <div *ngIf="!showSpinner" class="flex flex-col md:flex-row content-center gap-4 mt-1 flex-wrap">
     <div *ngFor="let match of matches">
       <app-match [match]="match" [showTournament]="true"></app-match>
     </div>

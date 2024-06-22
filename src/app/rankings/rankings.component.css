@@ -1,7 +1,11 @@
 table {
-  background-color: #FAF9F6;
-  border: 1px solid #FAF9F6;
+  /* background-color: #FAF9F6; */
+  /* border: 1px solid #FAF9F6; */
   border-radius: 10px;
+}
+
+.mat-mdc-table {
+  background-color: rgb(22 163 74);
 }
 
 .mat-mdc-header-row {

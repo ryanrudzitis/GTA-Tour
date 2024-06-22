@@ -12,7 +12,9 @@ export class RankingsComponent {
 
   showSpinner = true;
   allPlayers: any[] = [];
-  displayedColumns: string[] = ['rank', 'name', 'points', 'record'];
+  // displayedColumns: string[] = ['rank', 'name', 'points', 'record'];
+  displayedColumns: string[] = ['rank', 'name', 'points'];
+
 
   constructor(private firebaseService: FirebaseService, public flagService: FlagService) { }
 
