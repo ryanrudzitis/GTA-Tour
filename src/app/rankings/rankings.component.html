@@ -1,11 +1,11 @@
 <div class="p-4 h-full bg-green-600">
   <h2 class="text-3xl text-center md:text-left font-bold mb-4">Rankings</h2>
   <mat-spinner *ngIf="showSpinner" class="mx-auto" />
-  <div class="max-w-md">
+  <div class="max-w-xl w-fit">
     <table mat-table [dataSource]="allPlayers" *ngIf="!showSpinner">
       <ng-container matColumnDef="rank">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let player; let i = index">{{ i + 1 }}.</td>
+        <td class="md:text-xl lg:text-2xl xl:text-3xl" mat-cell *matCellDef="let player; let i = index">{{ i + 1 }}.</td>
       </ng-container>
 
       <ng-container matColumnDef="name">
@@ -19,7 +19,7 @@
               [firstName]="player.firstName"
               [lastName]="player.lastName"
             ></app-profile-pic>
-            <a [routerLink]="['/player', player.id]" class="text-blue-700">
+            <a [routerLink]="['/player', player.id]" class="text-blue-700 md:text-xl lg:text-2xl xl:text-3xl">
               {{ player.firstName[0] }}. {{ player.lastName }}
             </a>
             {{ flagService.getFlag(player.country) }}
@@ -29,7 +29,7 @@
 
       <ng-container matColumnDef="points">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let player">{{ player.points }} pts</td>
+        <td class="md:text-xl lg:text-2xl xl:text-3xl" mat-cell *matCellDef="let player">{{ player.points }} pts</td>
       </ng-container>
 
       <!-- <ng-container matColumnDef="record">
